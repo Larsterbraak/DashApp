@@ -503,7 +503,7 @@ a {
 
 .has-value.Select--single>.Select-control .Select-value .Select-value-label, .has-value.is-pseudo-focused.Select--single>.Select-control .Select-value .Select-value-label {
   color: white;
-  background: rgb(38,43,61);
+  background: rgb(38,43,250);
   background-color: rgb(38,43,61);
 }
 ._dash-app-content {

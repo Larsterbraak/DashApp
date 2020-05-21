@@ -34,13 +34,16 @@ fig.update_layout({
     'paper_bgcolor': 'rgba(0,0,0,0)',
 })
 
-VaRs = pd.DataFrame([[0.19, 0.21, 0.18], [0.53, 0.75, 0.85], [1.21, 1.59, 1.52]])
-VaRs.columns=['10-days', '20-days', '50-days']
+VaRs = pd.DataFrame([["TimeGAN", 0.19, 0.21, 0.18], ["Vasicek", 0.53, 0.75, 0.85], ["Hull-White", 1.21, 1.59, 1.52]])
+VaRs.columns=['Model', '10-days', '20-days', '50-days']
 VaRs.index=['TimeGAN', 'Vasicek', 'Hull-White']
 
 page_2_layout = html.Div([    
     html.H4('Interest rate risk via Monte-Carlo simulation', style = {"font-size":"24pt", "font-weight":"200", "letter-spacing":"1px"}),
-    html.H4('1.) ESTER simulations based on TimeGAN', style = {"font-size":"16pt", "font-weight":"200", "letter-spacing":"1px"}),
+    
+    dcc.Markdown('''
+                ###### 1.) ESTER simulations based on TimeGAN''', style = {"padding":"3px"}),
+
     dcc.Dropdown(
         id='page-1-dropdown',
         options=[{'label': i, 'value': i} for i in ['ESTER', 'PRE-ESTER', 'EONIA']],
@@ -50,20 +53,22 @@ page_2_layout = html.Div([
 
     html.Div(id='page-1-content'),
     
-    dcc.Graph(figure = fig),
+    dcc.Graph(figure = fig), 
     
-    html.H4('2.) Value-at-Risk for ESTER based on TimeGAN and reference models', style = {"font-size":"16pt", "font-weight":"200", "letter-spacing":"1px"}),    
+    dcc.Markdown('''
+                ###### 2.) Value-at-Risk for ESTER based on TimeGAN and reference models''', style = {"padding":"3px"}),
+    
     dash_table.DataTable(
         id = 'VaR-table',
         data=VaRs.to_dict('records'),
         columns=[{'id': c, 'name': c} for c in VaRs.columns],
 
-        style_header={'backgroundColor': 'rgb(30, 30, 30)'},
+        style_header={'backgroundColor': 'rgb(38, 43, 61)'},
         style_cell={
-            'backgroundColor': 'rgb(50, 50, 50)',
+            'backgroundColor': 'rgb(38, 43, 61)',
             'color': 'white'
         },
     ),
 
-    
+
 ], style={"margin-right":"5%", "margin-left":"5%"})

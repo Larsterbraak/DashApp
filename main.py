@@ -93,6 +93,7 @@ TEST_STYLE_2 = {
     "color": "rgb(226,239,250)",
     'borderRight': '0.5px solid white',
     "float":"center",
+    "margin-left":"10%",
     "heigth":"5%",
 }
 
@@ -178,7 +179,7 @@ tabs = html.Div(dcc.Tabs(id = 'circos-control-tabs', value = 'what-is', children
                     
                     html.Div(dcc.Dropdown(
                         id = "cmap",
-                        options=[{'label': i, 'value': i} for i in ['US', 'EU', 'Asia', 'Other']]) 
+                        options=[{'label': i, 'value': i} for i in ['US', 'EU', 'Asia', 'Other']])
                     ),
 
                     html.H4("Term of rate", style = {"font-size":"18pt", "font-weight":"200", "letter-spacing":"1px"}),
@@ -229,16 +230,8 @@ content = html.Div([dbc.Nav(children = [
             dbc.NavLink("Interest rate risk", href="/page-2", id="page-2-link", style=TEST_STYLE_3),
             dbc.NavLink("TimeGAN training results", href="/page-3", id="page-3-link", style=TEST_STYLE_4)
     
-            #    dbc.Nav(
-            #[
-            #    dbc.NavLink("Interest rate risk for fictitious portfolio", href="/page-1", id="page-1-link", style=NAV_STYLE),
-            #    dbc.NavLink("Interest rate risk", href="/page-2", id="page-2-link", style=NAV_STYLE),
-            #    dbc.NavLink("TimeGAN training results", href="/page-3", id="page-3-link", style=NAV_STYLE),
-            #],
-            #fill=True,
-            #vertical=False,
-            #),
-            ], fill=True),
+            ], fill=True, style={"padding":"15px"}),
+
             html.Div(id="page-content")
         ], style=CONTENT_STYLE)
 
@@ -283,7 +276,7 @@ def page_1_dropdown(value):
 @app.callback(Output('page-2-content', 'children'),
               [Input('page-2-radios', 'value')])
 def page_2_radios(value):
-    return 'You have selected "{}"'.format(value)
+    return 'Currently showing the "{}" short rate.'.format(value)
 
 # Index Page callback
 @app.callback(Output('page-content', 'children'),

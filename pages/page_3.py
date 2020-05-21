@@ -7,8 +7,8 @@ import pandas as pd
 import plotly.express as px
 import plotly.graph_objs as go
 
-VaRs = pd.DataFrame([[0.19, 0.21, 0.18], [0.53, 0.75, 0.85], [1.21, 1.59, 1.52]])
-VaRs.columns=['10-days', '20-days', '50-days']
+VaRs = pd.DataFrame([["TimeGAN", 0.19, 0.21, 0.18], ["Vasicek", 0.53, 0.75, 0.85], ["Hull-White", 1.21, 1.59, 1.52]])
+VaRs.columns=['Model', '10-days', '20-days', '50-days']
 VaRs.index=['TimeGAN', 'Vasicek', 'Hull-White']
 
 df = pd.read_csv('data/df_full_pre_ester.csv', sep=';')
@@ -87,13 +87,17 @@ fig2 = dict(data=data, layout=layout)
 
 page_3_layout = html.Div([
     html.H4('Training results for TimeGAN', style = {"font-size":"24pt", "font-weight":"200", "letter-spacing":"1px"}),
-    html.H4('1.) Train on Synthetic, Test on Real (TSTR) for VaR(99%) on short rates', style = {"font-size":"16pt", "font-weight":"200", "letter-spacing":"1px"}),
+    
+    dcc.Markdown('''
+                ###### 1.) Train on Synthetic, Test on Real (TSTR) for VaR(99%) on short rates''', style = {"padding":"3px"}),
     dcc.Graph(figure = fig),
 
-    html.H4('2.) Qualtitative assessment of difference between simulated and real short rates based on t-SNE', style = {"font-size":"16pt", "font-weight":"200", "letter-spacing":"1px"}),
+    dcc.Markdown('''
+                ###### 2.) Qualtitative assessment of difference between simulated and real short rates based on t-SNE''', style = {"padding":"3px"}),
     dcc.Graph(figure = fig2),
-    html.H4('3.) Discriminative score for an ad-hoc discriminator training', style = {"font-size":"16pt", "font-weight":"200", "letter-spacing":"1px"}),
-    html.P('VaR(99%) for different time periods!'),
+   
+    dcc.Markdown('''
+                ###### 3.) Discriminative score for an ad-hoc discriminator training''', style = {"padding":"3px"}),
     dash_table.DataTable(
         id = 'VaR-table',
         data=VaRs.to_dict('records'),
