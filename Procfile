@@ -1,1 +1,1 @@
-web: gunicorn main:thesis-lars-ter-braak
+web: gunicorn main:server
