@@ -37,7 +37,7 @@ SIDEBAR_STYLE = {
     "top": "10rem",
     "left": "4rem",
     "bottom": 0,
-    "width": "31%",
+    "width": "30%",
     "margin-left": "4rem",
     "margin-right": "2rem",
     "padding": "2rem 1rem",
@@ -58,7 +58,7 @@ CONTENT_STYLE = {
     "margin-left": "1rem",
     "margin-right": "1rem",
     "padding": "2rem 1rem",
-    "width": "62%",
+    "width": "60%",
     "background-color": "rgb(38,43,61)",
     "color": "rgb(226,239,250)",
     'border': '1px solid rgb(38,43,61)',
@@ -290,8 +290,6 @@ def render_page_content(pathname):
         return page_2.page_2_layout
     elif pathname == '/page-3':
         return page_3.page_3_layout
-    elif pathname == '/page-4':
-        return page_4.page_4_layout
 
     # If the user tries to reach a different page, return a 404 message
     return dbc.Jumbotron(
@@ -299,7 +297,7 @@ def render_page_content(pathname):
             html.H1("404: Not found", className="text-danger"),
             html.Hr(),
             html.P(f"The pathname {pathname} was not recognised..."),
-        ]
+        ], style = {"background-color":"rgb(38,43,61)"}
     )
 
 if __name__ == '__main__':
