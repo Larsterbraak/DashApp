@@ -22,14 +22,14 @@ external_stylesheets = [
 
 app = dash.Dash(__name__,
                 external_stylesheets=external_stylesheets,
-                url_base_pathname= '/',
-                assets_url_path= '/assets/',
-                assets_folder= os_path.join(os_path.dirname(os_path.abspath(__file__)), 'assets/')
+                #url_base_pathname= '/',
+                #assets_url_path= '/assets/',
+                #assets_folder= os_path.join(os_path.dirname(os_path.abspath(__file__)), 'assets/')
                 )
 
-server = app.server
-
 app.config.suppress_callback_exceptions = True
+
+server = app.server
 
 # the style arguments for the sidebar. We use position:fixed and a fixed width
 SIDEBAR_STYLE = {
@@ -68,7 +68,6 @@ CONTENT_STYLE = {
 }
 
 NAVBAR_STYLE = {
-    #"position":"fixed",
     "margin-left":"1rem",
     "margin-right": "1rem",
     "margin-bottom": "1rem",
@@ -136,18 +135,21 @@ NAV_STYLE = {
 }
 
 tabs = html.Div(dcc.Tabs(id = 'circos-control-tabs', value = 'what-is', children = [
+    
     dcc.Tab(
         label = 'About',
         value = 'what-is',
         style=TEST_STYLE, selected_style=tab_selected_style,
         children = html.Div(id = 'control-tab', children = [
+            
             html.H4("What is TimeGAN for short rates?", style = {"font-size":"24pt", "font-weight":"200", "letter-spacing":"1px"}),
 
-            dcc.Markdown(''' ###### This app is a demonstration of the MSc Thesis [TimeGAN for short rates](https://https://arxiv.org/) \
-            commisioned by the Erasmus University Quantitative Finance department and \
-            performed by Lars ter Braak. Feel free to have a look around and play with \
-            the TimeGAN to simulate short rates and see the implications on fixed-income portfolios. \
-            You can also check out my training scheme on [Tensorboard](https://tensorboard.dev/).''', style = {"padding":"5px"}),
+            dcc.Markdown(''' 
+                        ###### This app is a demonstration of the MSc Thesis [TimeGAN for short rates](https://https://arxiv.org/) \
+                        commisioned by the Erasmus University Quantitative Finance department and \
+                        performed by Lars ter Braak. Feel free to have a look around and play with \
+                        the TimeGAN to simulate short rates and see the implications on fixed-income portfolios. \
+                        You can also check out my training scheme on [Tensorboard](https://tensorboard.dev/).''', style = {"padding":"5px"}),
 
             dcc.Markdown('''
                         ###### On the first page you will find the current €STER short rate and the Value-at-Risk for different \
@@ -165,11 +167,11 @@ tabs = html.Div(dcc.Tabs(id = 'circos-control-tabs', value = 'what-is', children
 
     dcc.Tab(
             label = 'Use own data',
-            value = 'data',
-            
+            value = 'data',      
             style=TEST_STYLE, selected_style=tab_selected_style,
             
             children = html.Div(className = 'circos-tab', children = [
+                
                 html.H4("Use your own short rate data?", style = {"font-size":"24pt", "font-weight":"200", "letter-spacing":"1px"}),
                 
                 dcc.Markdown('''
@@ -177,6 +179,7 @@ tabs = html.Div(dcc.Tabs(id = 'circos-control-tabs', value = 'what-is', children
                             which region and for what term you intend to use the TimeGAN for short rates.''', style = {"padding":"3px"}),
 
                 html.Div(className = 'app-controls-block', children= [
+                    
                     html.H4("Region", style = {"font-size":"18pt", "font-weight":"200", "letter-spacing":"1px"}),
                     
                     html.Div(dcc.Dropdown(
@@ -195,8 +198,7 @@ tabs = html.Div(dcc.Tabs(id = 'circos-control-tabs', value = 'what-is', children
                     dcc.Markdown('''
                                 ###### Your file must be in .xlsx or .csv file format to be working. Please upload the file below.''', style = {"padding":"5px"}),
 
-                    dcc.Upload(
-                                id='upload-data',
+                    dcc.Upload(id='upload-data',
                                 children=html.Div([
                                     'Drag and Drop or ',
                                     html.A('Select Files', style={"borderBottom":"1px solid white"})
@@ -241,7 +243,7 @@ navbar = html.Nav(className = "navbar navbar-default navbar-static-top", childre
             html.Div([
                 html.Button(html.A('Check out my LinkedIn', href="https://www.linkedin.com/in/lars-ter-braak/"),
                                     id='linked_in', n_clicks=0, className="button-primary"),
-                html.Img(src='assets/linkedin.png', style={"height":"40px", "margin-left":"2rem", "float":"left"})
+               #html.Img(src='assets/linkedin.png', style={"height":"40px", "margin-left":"2rem", "float":"left"})
             ], className = 'row',  style = {"float":"left", "margin-left": "2rem", "margin-top":"1rem", "margin-bottom":"1rem"}),
             
             html.H2('TimeGAN for EONIA-€STER transition', style = {"float": "center", "margin-top":"1rem", "margin-left": "4rem", "margin-right":"4rem", "margin-bottom":"1rem"}), 
@@ -272,7 +274,7 @@ def toggle_active_links(pathname):
 @app.callback(dash.dependencies.Output('page-1-content', 'children'),
               [dash.dependencies.Input('page-1-dropdown', 'value')])
 def page_1_dropdown(value):
-    return 'You have selected "{}"'.format(value)
+    return 'Currently showing the "{}" short rate'.format(value)
 
 # Page 2
 @app.callback(Output('page-2-content', 'children'),
@@ -294,15 +296,18 @@ def render_page_content(pathname):
     # If the user tries to reach a different page, return a 404 message
     return dbc.Jumbotron(
         [
-            html.H1("404: Not found", className="text-danger"),
+            #html.H1("404: Not found", className="text-danger"),
             html.Hr(),
-            html.P(f"The pathname {pathname} was not recognised..."),
+            dcc.Markdown('''
+                        ###### Feel free to read up on this app on the left side of the page. \
+                        If you are ready to dive into the TimeGAN, select one of the pages above.''', style = {"padding":"5px"}),
+            #html.P(f"The pathname {pathname} was not recognised..."),
         ], style = {"background-color":"rgb(38,43,61)"}
     )
 
 if __name__ == '__main__':
-    app.config.update({
-        'routes_pathname_prefix': '/',
-        'requests_pathname_prefix': '/',
-    })
+    #app.config.update({
+    #    'routes_pathname_prefix': '/',
+    #    'requests_pathname_prefix': '/',
+    #})
     app.run_server(debug=True)
