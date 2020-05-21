@@ -6,7 +6,7 @@ verify_ssl = true
 [dev-packages]
 
 [packages]
-pandas = "==0.23.4"
+pandas = "*"
 plotly = "*"
 dash = "*"
 dash-html-components = "*"
