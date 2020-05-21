@@ -17,6 +17,7 @@ dash-bootstrap-components = "*"
 dash-table = "*"
 plotly-express = "*"
 scikit-learn = "*"
+gunicorn = "*"
 
 [requires]
 python_version = "3.8"
