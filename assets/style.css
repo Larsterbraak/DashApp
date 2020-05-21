@@ -267,13 +267,13 @@ a:hover {
 }
 .button.button-primary, button.button-primary, input[type="submit"].button-primary, input[type="reset"].button-primary, input[type="button"].button-primary {
   color: #FFF;
-  background-color: #33C3F0;
-  border-color: #33C3F0;
+  background-color: transparent;
+  border-color: #FFF;
 }
 .button.button-primary:hover, button.button-primary:hover, input[type="submit"].button-primary:hover, input[type="reset"].button-primary:hover, input[type="button"].button-primary:hover, .button.button-primary:focus, button.button-primary:focus, input[type="submit"].button-primary:focus, input[type="reset"].button-primary:focus, input[type="button"].button-primary:focus {
   color: #FFF;
-  background-color: #1EAEDB;
-  border-color: #1EAEDB;
+  background-color: rgba(256, 256, 256, 0.2); 
+  border-color: #FFF;
 }
 /* Forms –––––––––––––––––––––––––––––––––––––––––––––––––– */
 input[type="email"], input[type="number"], input[type="search"], input[type="text"], input[type="tel"], input[type="url"], input[type="password"], textarea, select {
@@ -419,7 +419,7 @@ html, body{
 }
 
 body {
-  background-color: #1E1E1E;
+  background-color: rgb(226,239,250);
   color: #d8d8d8;
   height: 100%;
   margin: 0;
@@ -485,8 +485,8 @@ a {
   padding-bottom: 12px;
 }
 .Select-control, .Select-menu-outer, .Select-multi-value-wrapper, .select-up, .is-open .Select-control {
-  background-color: #1E1E1E;
-  color: white;
+  background-color: rgb(38,43,61);
+  color: rgb(255, 255, 255);
 
 }
 
@@ -503,8 +503,8 @@ a {
 
 .has-value.Select--single>.Select-control .Select-value .Select-value-label, .has-value.is-pseudo-focused.Select--single>.Select-control .Select-value .Select-value-label {
   color: white;
-  background: #1E1E1E;
-  background-color: #1E1E1E;
+  background: rgb(38,43,61);
+  background-color: rgb(38,43,61);
 }
 ._dash-app-content {
   overflow-x: hidden;
@@ -512,7 +512,7 @@ a {
   position: relative;
 }
 .has-value.Select--single>.Select-control .Select-value .Select-value-label, .has-value.is-pseudo-focused.Select--single>.Select-control .Select-value .Select-value-labeln {
-  color: #d8d8d8;
+  color: white;
   font-weight: 400;
   font-size: 14px;
 }

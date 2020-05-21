@@ -19,7 +19,7 @@ dates = pd.date_range(start = '01-01-2017',
 
 
 fig = px.line(x=dates, y=df.WT)
-fig.update_layout(yaxis_title = 'Short rate', xaxis_title = 'Date')
+fig.update_layout(yaxis_title = 'Short rate', xaxis_title = 'Date $\tau$')
 fig.add_trace(go.Scatter(x=dates, y=[-0.4531 for x in range(649)], name='VaR(99%)',
                          line=dict(color='firebrick', width=2, dash = 'dash')))
 fig.update_layout({
@@ -40,11 +40,60 @@ fig.update_xaxes(
     )
 )
 
+# The t-SNE projections
+from sklearn.manifold import TSNE
+from sklearn.datasets import load_digits
+
+X, Target = load_digits(return_X_y=True)
+
+tsne = TSNE()
+tsne_results = tsne.fit_transform(X)
+
+traceTSNE = go.Scatter(x = tsne_results[:,0],
+                       y = tsne_results[:,1],
+                    #   name = Target,
+                    #  hoveron = Target,
+                       mode = 'markers',
+                    #  text = Target.unique(),
+                       showlegend = True,
+                       marker = dict(size = 8,
+                                    color = Target,
+                                    colorscale ='Jet',
+                                    showscale = False,
+                                    
+                                    line = dict(
+                                    width = 2,
+                                    color = 'rgb(255, 255, 255)'
+                                    ),
+                                opacity = 0.8
+                            )
+                    )
+
+data = [traceTSNE]
+
+layout = dict(title = 'TSNE (T-Distributed Stochastic Neighbour Embedding)',
+              hovermode= 'closest',
+              yaxis = dict(zeroline = False),
+              #yaxis_title = 'Dimension 2',
+              xaxis = dict(zeroline = False),
+              #xaxis_title = 'Dimension 1 $$\tau$$',
+              showlegend= True,
+              plot_bgcolor = 'rgba(0,0,0,0)',
+              paper_bgcolor = 'rgba(0,0,0,0)',
+
+             )
+
+fig2 = dict(data=data, layout=layout)
+
 page_3_layout = html.Div([
-    html.H4('Training results for the TimeGAN', style = {"font-size":"24pt", "font-weight":"200", "letter-spacing":"1px"}),
-    html.P('Check out the predicted VaR(99%) based on the TimeGAN in this plot!'),
+    html.H4('Training results for TimeGAN', style = {"font-size":"24pt", "font-weight":"200", "letter-spacing":"1px"}),
+    html.H4('1.) Train on Synthetic, Test on Real (TSTR) for VaR(99%) on short rates', style = {"font-size":"16pt", "font-weight":"200", "letter-spacing":"1px"}),
     dcc.Graph(figure = fig),
-    html.P('Check out the VaR(99%) for different time intervals!'),
+
+    html.H4('2.) Qualtitative assessment of difference between simulated and real short rates based on t-SNE', style = {"font-size":"16pt", "font-weight":"200", "letter-spacing":"1px"}),
+    dcc.Graph(figure = fig2),
+    html.H4('3.) Discriminative score for an ad-hoc discriminator training', style = {"font-size":"16pt", "font-weight":"200", "letter-spacing":"1px"}),
+    html.P('VaR(99%) for different time periods!'),
     dash_table.DataTable(
         id = 'VaR-table',
         data=VaRs.to_dict('records'),

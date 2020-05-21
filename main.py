@@ -44,7 +44,7 @@ SIDEBAR_STYLE = {
     'border': '1px solid rgb(38,43,61)',
     'borderRadius': '15px',
     'overflow': 'hidden',
-    'font':'Helvetica'
+    'font':{"family":'Helvetica', "size":"12"}
 }
 
 # the styles for the main content position it to the right of the sidebar and
@@ -88,13 +88,34 @@ TEST_STYLE = {
     'font':'Helvetica',
 }
 
+TEST_STYLE_2 = {
+    "background-color": "rgb(38,43,61)",
+    "color": "rgb(226,239,250)",
+    'borderRight': '0.5px solid white',
+    "float":"center",
+    "heigth":"5%",
+}
+
+TEST_STYLE_3 = {
+    "background-color": "rgb(38,43,61)",
+    "color": "rgb(226,239,250)",
+    'borderRight': '0.5px solid white', 
+    "float":"center",
+    "heigth":"5%",
+}
+
+TEST_STYLE_4 = {
+    "background-color": "rgb(38,43,61)",
+    "color": "rgb(226,239,250)",
+    "float":"center",
+    "heigth":"5%",
+}
+
 tab_selected_style = {
     "background-color": "rgb(38,43,61)",
     "color": "#7CD3F7",
     "borderTop":"3px solid #7CD3F7",
-    #'border': '1px solid white',
     'borderBottom':'0px solid #d6d6d6',
-
 }
 
 DROPDOWN_STYLE = {
@@ -119,20 +140,23 @@ tabs = html.Div(dcc.Tabs(id = 'circos-control-tabs', value = 'what-is', children
         children = html.Div(id = 'control-tab', children = [
             html.H4("What is TimeGAN for short rates?", style = {"font-size":"24pt", "font-weight":"200", "letter-spacing":"1px"}),
 
-            dcc.Markdown("This app is a demonstration of the MSc Thesis 'TimeGAN' for short rates \
+            dcc.Markdown(''' ###### This app is a demonstration of the MSc Thesis [TimeGAN for short rates](https://https://arxiv.org/) \
             commisioned by the Erasmus University Quantitative Finance department and \
             performed by Lars ter Braak. Feel free to have a look around and play with \
             the TimeGAN to simulate short rates and see the implications on fixed-income portfolios. \
-            You can also check out my training scheme on [Tensorboard](https://tensorboard.dev/).", style = {"padding":"5px"}),
+            You can also check out my training scheme on [Tensorboard](https://tensorboard.dev/).''', style = {"padding":"5px"}),
 
-            dcc.Markdown("On the first page you will find the current €STER short rate and the Value-at-Risk for different \
-                         time periods according using the TimeGAN for short rates.", style = {"padding":"5px"}),
+            dcc.Markdown('''
+                        ###### On the first page you will find the current €STER short rate and the Value-at-Risk for different \
+                        time periods according using the TimeGAN for short rates.''', style = {"padding":"3px"}),
             
-            dcc.Markdown("The second page will display the results section for the training of the TimeGAN.", style = {"padding":"5px"}),
+            dcc.Markdown('''
+                        ###### The second page will display the results section for the training of the TimeGAN.''', style = {"padding":"3px"}),
 
-            dcc.Markdown("The third page show a practical application of the simulation of the €STER short rate. \
+            dcc.Markdown('''
+                        ###### The third page show a practical application of the simulation of the €STER short rate. \
                         This page shows you a delta ladder for a fictious Interest Rate Swap portfolio. As a comparison, \
-                        the Vasicek and Hull-White short rate models are also displayed.", style = {"padding":"5px"})
+                        the Vasicek and Hull-White short rate models are also displayed.''', style = {"padding":"3px"})
         ])
     ),
 
@@ -145,29 +169,28 @@ tabs = html.Div(dcc.Tabs(id = 'circos-control-tabs', value = 'what-is', children
             children = html.Div(className = 'circos-tab', children = [
                 html.H4("Use your own short rate data?", style = {"font-size":"24pt", "font-weight":"200", "letter-spacing":"1px"}),
                 
-                dcc.Markdown("For research purposes it would be helpful if you specify for \
-                    which region and for what term you intend to use the TimeGAN for short rates.", style = {"padding":"5px", "font":"Calibri"}),
+                dcc.Markdown('''
+                            ###### For research purposes it would be helpful if you specify for \
+                            which region and for what term you intend to use the TimeGAN for short rates.''', style = {"padding":"3px"}),
 
                 html.Div(className = 'app-controls-block', children= [
                     html.H4("Region", style = {"font-size":"18pt", "font-weight":"200", "letter-spacing":"1px"}),
                     
                     html.Div(dcc.Dropdown(
                         id = "cmap",
-                        value = "US",
-                        options=[{'label': i, 'value': i} for i in ['US', 'EU', 'Asia', 'Other']],
-                        ), 
+                        options=[{'label': i, 'value': i} for i in ['US', 'EU', 'Asia', 'Other']]) 
                     ),
 
                     html.H4("Term of rate", style = {"font-size":"18pt", "font-weight":"200", "letter-spacing":"1px"}),
                     
                     html.Div(dcc.Dropdown(
                         id = "background",
-                        value = "US",
                         options=[{'label': i, 'value': i} for i in ['< 1M', '1M < x < 6M', '> 6M']],
-                    ), style=DROPDOWN_STYLE
+                        className = 'select-control'),
                     ),
 
-                    dcc.Markdown("Your file must be in .xlsx or .csv file format to be working. Please upload the file below", style = {"padding":"5px"}),
+                    dcc.Markdown('''
+                                ###### Your file must be in .xlsx or .csv file format to be working. Please upload the file below.''', style = {"padding":"5px"}),
 
                     dcc.Upload(
                                 id='upload-data',
@@ -200,29 +223,39 @@ sidebar = html.Div([
         options,
     ], style=SIDEBAR_STYLE)
 
-content = html.Div([dbc.Nav(
-            [
-                dbc.NavLink("Interest rate risk", href="/page-1", id="page-1-link", style=NAV_STYLE),
-                dbc.NavLink("Interest rate risk for fictitious portfolio", href="/page-2", id="page-2-link", style=NAV_STYLE),
-                dbc.NavLink("TimeGAN training results", href="/page-3", id="page-3-link", style=NAV_STYLE),
-               # dbc.NavLink("Analytics page real", href="/page-4", id="page-4-link", style=NAV_STYLE),
-            ],
-            fill=True,
-            vertical=False,
-            ),
+content = html.Div([dbc.Nav(children = [
+
+            dbc.NavLink("Interest rate risk in different fixed income portfolios", href="/page-1", id="page-1-link", style=TEST_STYLE_2),
+            dbc.NavLink("Interest rate risk", href="/page-2", id="page-2-link", style=TEST_STYLE_3),
+            dbc.NavLink("TimeGAN training results", href="/page-3", id="page-3-link", style=TEST_STYLE_4)
+    
+            #    dbc.Nav(
+            #[
+            #    dbc.NavLink("Interest rate risk for fictitious portfolio", href="/page-1", id="page-1-link", style=NAV_STYLE),
+            #    dbc.NavLink("Interest rate risk", href="/page-2", id="page-2-link", style=NAV_STYLE),
+            #    dbc.NavLink("TimeGAN training results", href="/page-3", id="page-3-link", style=NAV_STYLE),
+            #],
+            #fill=True,
+            #vertical=False,
+            #),
+            ], fill=True),
             html.Div(id="page-content")
         ], style=CONTENT_STYLE)
 
 navbar = html.Nav(className = "navbar navbar-default navbar-static-top", children=[          
             html.Div([
-                html.Button(html.A('Check out my LinkedIn', href="https://www.linkedin.com/in/lars-ter-braak/"), style = {"color":"rgb(226,239,250)",'border': '1px solid rgb(226,239,250)', 'borderRadius': '15px', 'overflow': 'hidden'}, 
-                                    id='linked_in', n_clicks=0, className="button:hover"),
-            ], className = 'row',  style = {"margin-right":0, "margin-left": "2rem", "top":"5%"}),
-            html.H2('TimeGAN for EONIA-€STER transition', style = {"margin-right": 0}), 
+                html.Button(html.A('Check out my LinkedIn', href="https://www.linkedin.com/in/lars-ter-braak/"),
+                                    id='linked_in', n_clicks=0, className="button-primary"),
+                html.Img(src='assets/linkedin.png', style={"height":"40px", "margin-left":"2rem", "float":"left"})
+            ], className = 'row',  style = {"float":"left", "margin-left": "2rem", "margin-top":"1rem", "margin-bottom":"1rem"}),
             
+            html.H2('TimeGAN for EONIA-€STER transition', style = {"float": "center", "margin-top":"1rem", "margin-left": "4rem", "margin-right":"4rem", "margin-bottom":"1rem"}), 
+
             html.Div([
-                html.Button(html.A('View on Github', href="https://github.com/Larsterbraak/Master_Thesis"), style = {"color":"rgb(226,239,250)", 'border': "2px solid rgb(226,239,250)"}, id='submit-val', n_clicks=0),
-            ], className = 'row',  style = {"margin-right": "2rem", "margin-left": 0, "top":"5%"}),
+                html.Img(src='assets/github.png', style={"height":"40px", "margin-right":"2rem", "float":"right"}),
+                html.Button(html.A('View on Github', href="https://github.com/Larsterbraak/Master_Thesis"), 
+                                    id='github', n_clicks=0, className="button-primary")                
+            ], className = 'row',  style = {"margin-right": "2rem", "float": "right", "margin-top":"1rem", "margin-bottom":"1rem"})
             
             ], style = NAVBAR_STYLE)
 

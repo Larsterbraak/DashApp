@@ -22,6 +22,9 @@ hull_white = (np.random.rand(1000)*1.92)
 
 page_1_layout = html.Div(children=[
     html.H4('Interest rate risk for fictious IRS portfolio', style = {"font-size":"24pt", "font-weight":"200", "letter-spacing":"1px"}),
+    
+    html.H4('1.) Delta ladder for a fictitious fixed income portfolio', style = {"font-size":"16pt", "font-weight":"200", "letter-spacing":"1px"}),
+    html.Div(id='home-content'),
     dcc.Graph(
         id = 'delta-ladder',
         figure={
@@ -31,5 +34,5 @@ page_1_layout = html.Div(children=[
                                 plot_bgcolor='rgb(38,43,61)',  paper_bgcolor='rgb(38,43,61)',
                                 )
         }),
-    html.Div(id='home-content')
+    
 ], style={"margin-right":"5%", "margin-left":"5%"})

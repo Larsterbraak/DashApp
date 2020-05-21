@@ -39,18 +39,20 @@ VaRs.columns=['10-days', '20-days', '50-days']
 VaRs.index=['TimeGAN', 'Vasicek', 'Hull-White']
 
 page_2_layout = html.Div([    
-    html.H4('Training results for the TimeGAN', style = {"font-size":"24pt", "font-weight":"200", "letter-spacing":"1px"}),
-    
+    html.H4('Interest rate risk via Monte-Carlo simulation', style = {"font-size":"24pt", "font-weight":"200", "letter-spacing":"1px"}),
+    html.H4('1.) ESTER simulations based on TimeGAN', style = {"font-size":"16pt", "font-weight":"200", "letter-spacing":"1px"}),
     dcc.Dropdown(
         id='page-1-dropdown',
         options=[{'label': i, 'value': i} for i in ['ESTER', 'PRE-ESTER', 'EONIA']],
-        value='ESTER'
+        value='ESTER', 
+        className = 'select-control'
     ),
+
+    html.Div(id='page-1-content'),
     
     dcc.Graph(figure = fig),
     
-    html.Div(children='''Value-at-Risk for different short rate models'''),
-    
+    html.H4('2.) Value-at-Risk for ESTER based on TimeGAN and reference models', style = {"font-size":"16pt", "font-weight":"200", "letter-spacing":"1px"}),    
     dash_table.DataTable(
         id = 'VaR-table',
         data=VaRs.to_dict('records'),
@@ -63,5 +65,5 @@ page_2_layout = html.Div([
         },
     ),
 
-    html.Div(id='page-1-content'),
+    
 ], style={"margin-right":"5%", "margin-left":"5%"})

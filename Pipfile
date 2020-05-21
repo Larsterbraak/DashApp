@@ -7,7 +7,7 @@ verify_ssl = true
 
 [packages]
 pandas = "==0.23.4"
-plotly = "==3.5.0"
+plotly = "*"
 dash = "*"
 dash-html-components = "*"
 dash-core-components = "*"
@@ -16,6 +16,7 @@ numpy = "*"
 dash-bootstrap-components = "*"
 dash-table = "*"
 plotly-express = "*"
+scikit-learn = "*"
 
 [requires]
 python_version = "3.8"
