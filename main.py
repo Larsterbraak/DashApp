@@ -147,7 +147,7 @@ tabs = html.Div(dcc.Tabs(id = 'circos-control-tabs', value = 'what-is', children
             dcc.Markdown(''' 
                         ###### This app is a demonstration of the MSc Thesis [TimeGAN for short rates](https://https://arxiv.org/) \
                         commisioned by the Erasmus University Quantitative Finance department and \
-                        performed by Lars ter Braak. Feel free to have a look around and play with \
+                        performed by [Lars ter Braak](https://www.linkedin.com/in/lars-ter-braak/). Feel free to have a look around and play with \
                         the TimeGAN to simulate short rates and see the implications on fixed-income portfolios. \
                         You can also check out my training scheme on [Tensorboard](https://tensorboard.dev/).''', style = {"padding":"5px"}),
 
