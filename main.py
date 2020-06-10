@@ -28,10 +28,11 @@ app = dash.Dash(__name__,
                 assets_url_path= '/assets/',
                 assets_folder= os_path.join(os_path.dirname(os_path.abspath(__file__)), 'assets/')
                 )
+server = app.server
 
 app.config.suppress_callback_exceptions = True
 
-server = app.server
+
 
 # the style arguments for the sidebar. We use position:fixed and a fixed width
 SIDEBAR_STYLE = {
