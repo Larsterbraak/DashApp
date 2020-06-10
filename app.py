@@ -1,18 +1,12 @@
 import dash
-#import dash_auth
 import dash_core_components as dcc
 import dash_html_components as html
 from dash.dependencies import Input, Output, State
 import dash_bootstrap_components as dbc
-from os import path as os_path
 
 from pages import page_1
 from pages import page_2
 from pages import page_3
-
-#USERNAME_PASSWORD_PAIRS = [
-#    ['Larsterbraak', 'Larsterbraak'],['ChenZhou', 'ChenZhou']
-#]
 
 # external CSS stylesheets
 external_stylesheets = [
@@ -25,11 +19,8 @@ external_stylesheets = [
     }
 ]
 
-app = dash.Dash(external_stylesheets=external_stylesheets)#,
-                #assets_url_path= '/assets/')
-#auth = dash_auth.BasicAuth(app,USERNAME_PASSWORD_PAIRS)
+app = dash.Dash(external_stylesheets=external_stylesheets)
 server = app.server
-
 app.config.suppress_callback_exceptions = True
 
 # the style arguments for the sidebar. We use position:fixed and a fixed width
@@ -244,7 +235,6 @@ navbar = html.Nav(className = "navbar navbar-default navbar-static-top", childre
             html.Div([
                 html.Button(html.A('Check out my LinkedIn', href="https://www.linkedin.com/in/lars-ter-braak/"),
                                     id='linked_in', n_clicks=0, className="button-primary"),
-               #html.Img(src='assets/linkedin.png', style={"height":"40px", "margin-left":"2rem", "float":"left"})
             ], className = 'row',  style = {"float":"left", "margin-left": "2rem", "margin-top":"1rem", "margin-bottom":"1rem"}),
             
             html.H2('TimeGAN for EONIA-€STER transition', style = {"float": "center", "margin-top":"1rem", "margin-left": "4rem", "margin-right":"4rem", "margin-bottom":"1rem"}), 
@@ -271,13 +261,13 @@ def toggle_active_links(pathname):
         return True, False, False
     return [pathname == f"/page-{i}" for i in range(1, 4)]
 
-# Page 1 callback
+# Callback for dropdown menu page 1
 @app.callback(dash.dependencies.Output('page-1-content', 'children'),
               [dash.dependencies.Input('page-1-dropdown', 'value')])
 def page_1_dropdown(value):
     return 'Currently showing the "{}" short rate'.format(value)
 
-# Page 2
+# Callback for dropdown menu page 2
 @app.callback(Output('page-2-content', 'children'),
               [Input('page-2-radios', 'value')])
 def page_2_radios(value):
@@ -290,15 +280,13 @@ def render_page_content(pathname):
     if pathname == '/':
         return dbc.Jumbotron(
         [
-            #html.H1("404: Not found", className="text-danger"),
             html.Hr(),
             dcc.Markdown('''
                         ###### Feel free to read up on this app on the left side of the page. \
                         If you are ready to dive into the TimeGAN, select one of the pages above.''', style = {"padding":"5px"}),
-            #html.P(f"The pathname {pathname} was not recognised..."),
         ], style = {"background-color":"rgb(38,43,61)"}
     )
-    if pathname == '/page-1':
+    elif pathname == '/page-1':
         return page_1.page_1_layout
     elif pathname == '/page-2':
         return page_2.page_2_layout
@@ -306,7 +294,8 @@ def render_page_content(pathname):
         return page_3.page_3_layout
 
     # If the user tries to reach a different page, return a 404 message
-    return dbc.Jumbotron(
+    else:
+        return dbc.Jumbotron(
         [
             #html.H1("404: Not found", className="text-danger"),
             html.Hr(),
