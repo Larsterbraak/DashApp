@@ -280,14 +280,15 @@ def page_2_radios(value):
               [Input('url', 'pathname')])
 def render_page_content(pathname):
     if pathname == '/':
-        return dbc.Jumbotron(
-        [
-            html.Hr(),
-            dcc.Markdown('''
-                        ###### Feel free to read up on this app on the left side of the page. \
-                        If you are ready to dive into the TimeGAN, select one of the pages above.''', style = {"padding":"5px"}),
-        ], style = {"background-color":"rgb(38,43,61)"}
-    )
+        return html.Hr()
+        #return dbc.Jumbotron(
+        #[
+        #    html.Hr(),
+        #    dcc.Markdown('''
+        #                ###### Feel free to read up on this app on the left side of the page. \
+        #                If you are ready to dive into the TimeGAN, select one of the pages above.''', style = {"padding":"5px"}),
+        #], style = {"background-color":"rgb(38,43,61)"}
+    #)
     elif pathname == '/page-1':
         return page_1.page_1_layout
     elif pathname == '/page-2':
