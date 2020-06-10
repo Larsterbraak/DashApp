@@ -109,7 +109,6 @@ NAV_STYLE = {
     "width":"30%"
 }
 
-
 tabs = html.Div(dcc.Tabs(id = 'circos-control-tabs', value = 'what-is', children = [
     
     dcc.Tab(
