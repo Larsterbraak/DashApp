@@ -1,0 +1,7 @@
+venv
+*.pyc
+.DS_Store
+.env
+pipfile
+Pipfile.lock
+README.md

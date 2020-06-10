@@ -297,16 +297,12 @@ def render_page_content(pathname):
 
     # If the user tries to reach a different page, return a 404 message
     else:
-        return dbc.Jumbotron(
-        [
-            #html.H1("404: Not found", className="text-danger"),
+        return dbc.Jumbotron([
             html.Hr(),
             dcc.Markdown('''
                         ###### Feel free to read up on this app on the left side of the page. \
                         If you are ready to dive into the TimeGAN, select one of the pages above.''', style = {"padding":"5px"}),
-            #html.P(f"The pathname {pathname} was not recognised..."),
-        ], style = {"background-color":"rgb(38,43,61)"}
-    )
+        ], style = {"background-color":"rgb(38,43,61)"})
 
 if __name__ == '__main__':
     app.run_server()
