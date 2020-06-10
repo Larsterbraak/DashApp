@@ -19,9 +19,11 @@ external_stylesheets = [
     }
 ]
 
-app = dash.Dash(external_stylesheets=external_stylesheets)
+app = dash.Dash(__name__,
+                external_stylesheets=external_stylesheets)
 server = app.server
 app.config.suppress_callback_exceptions = True
+app.scripts.config.serve_locally = False
 
 # the style arguments for the sidebar. We use position:fixed and a fixed width
 SIDEBAR_STYLE = {
