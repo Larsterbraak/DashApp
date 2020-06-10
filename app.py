@@ -1,4 +1,5 @@
 import dash
+import dash_auth
 import dash_core_components as dcc
 import dash_html_components as html
 from dash.dependencies import Input, Output, State
@@ -9,7 +10,10 @@ from pages import page_1
 from pages import page_2
 from pages import page_3
 
-#%%
+USERNAME_PASSWORD_PAIRS = [
+    ['Larsterbraak', 'Larsterbraak'],['ChenZhou', 'ChenZhou']
+]
+
 # external CSS stylesheets
 external_stylesheets = [
     'https://codepen.io/chriddyp/pen/bWLwgP.css',
@@ -21,13 +25,10 @@ external_stylesheets = [
     }
 ]
 
-#%%
 app = dash.Dash(__name__,
                 external_stylesheets=external_stylesheets,
-                url_base_pathname= '/page-1/',
-                assets_url_path= '/assets/'#,
-                #assets_folder= os_path.join(os_path.dirname(os_path.abspath(__file__)), 'assets/')
-                )
+                assets_url_path= '/assets/')
+auth = dash_auth.BasicAuth(app,USERNAME_PASSWORD_PAIRS)
 server = app.server
 app.config.suppress_callback_exceptions = True
 
@@ -306,8 +307,4 @@ def render_page_content(pathname):
     )
 
 if __name__ == '__main__':
-    #app.config.update({
-    #    'routes_pathname_prefix': '/',
-    #    'requests_pathname_prefix': '/',
-    #})
-    app.run_server(debug=True)
+    app.run_server()

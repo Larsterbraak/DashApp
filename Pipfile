@@ -18,6 +18,8 @@ dash-table = "*"
 plotly-express = "*"
 scikit-learn = "*"
 gunicorn = "*"
+dash-auth = "*"
+gevent = "*"
 
 [requires]
 python_version = "3.8"
