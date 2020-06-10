@@ -1,5 +1,5 @@
 import dash
-import dash_auth
+#import dash_auth
 import dash_core_components as dcc
 import dash_html_components as html
 from dash.dependencies import Input, Output, State
@@ -10,9 +10,9 @@ from pages import page_1
 from pages import page_2
 from pages import page_3
 
-USERNAME_PASSWORD_PAIRS = [
-    ['Larsterbraak', 'Larsterbraak'],['ChenZhou', 'ChenZhou']
-]
+#USERNAME_PASSWORD_PAIRS = [
+#    ['Larsterbraak', 'Larsterbraak'],['ChenZhou', 'ChenZhou']
+#]
 
 # external CSS stylesheets
 external_stylesheets = [
@@ -28,8 +28,9 @@ external_stylesheets = [
 app = dash.Dash(__name__,
                 external_stylesheets=external_stylesheets,
                 assets_url_path= '/assets/')
-auth = dash_auth.BasicAuth(app,USERNAME_PASSWORD_PAIRS)
+#auth = dash_auth.BasicAuth(app,USERNAME_PASSWORD_PAIRS)
 server = app.server
+
 app.config.suppress_callback_exceptions = True
 
 # the style arguments for the sidebar. We use position:fixed and a fixed width
@@ -287,6 +288,17 @@ def page_2_radios(value):
 @app.callback(Output('page-content', 'children'),
               [Input('url', 'pathname')])
 def render_page_content(pathname):
+    if pathname == '/':
+        return dbc.Jumbotron(
+        [
+            #html.H1("404: Not found", className="text-danger"),
+            html.Hr(),
+            dcc.Markdown('''
+                        ###### Feel free to read up on this app on the left side of the page. \
+                        If you are ready to dive into the TimeGAN, select one of the pages above.''', style = {"padding":"5px"}),
+            #html.P(f"The pathname {pathname} was not recognised..."),
+        ], style = {"background-color":"rgb(38,43,61)"}
+    )
     if pathname == '/page-1':
         return page_1.page_1_layout
     elif pathname == '/page-2':
