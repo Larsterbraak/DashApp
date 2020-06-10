@@ -3,5 +3,5 @@ venv
 .DS_Store
 .env
 pipfile
-Pipfile.lock
+*.lock
 README.md
