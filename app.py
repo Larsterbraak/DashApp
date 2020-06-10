@@ -304,5 +304,5 @@ def render_page_content(pathname):
                         If you are ready to dive into the TimeGAN, select one of the pages above.''', style = {"padding":"5px"}),
         ], style = {"background-color":"rgb(38,43,61)"})
 
-if __name__ == '__main__':
+if __name__=='__main__':
     app.run_server()
