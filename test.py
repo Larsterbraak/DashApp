@@ -203,17 +203,45 @@ sidebar = html.Div([
         options,
     ], style=SIDEBAR_STYLE)
 
+content = html.Div([dbc.Nav(children = [
 
-app.layout = html.Div([
-    html.H2('Hello World'),
-    dcc.Dropdown(
-        id='dropdown',
-        options=[{'label': i, 'value': i} for i in ['LA', 'NYC', 'MTL']],
-        value='LA'
-    ),
-    html.Div(id='display-value'),
-    sidebar
-])
+            dbc.NavLink("Interest rate risk in different fixed income portfolios", href="/page-1", id="page-1-link", style=TEST_STYLE_2),
+            dbc.NavLink("Interest rate risk", href="/page-2", id="page-2-link", style=TEST_STYLE_3),
+            dbc.NavLink("TimeGAN training results", href="/page-3", id="page-3-link", style=TEST_STYLE_4)
+    
+            ], fill=True, style={"padding":"15px"}),
+
+            html.Div(id="page-content")
+        ], style=CONTENT_STYLE)
+
+navbar = html.Nav(className = "navbar navbar-default navbar-static-top", children=[          
+            html.Div([
+                html.Button(html.A('Check out my LinkedIn', href="https://www.linkedin.com/in/lars-ter-braak/"),
+                                    id='linked_in', n_clicks=0, className="button-primary"),
+            ], className = 'row',  style = {"float":"left", "margin-left": "2rem", "margin-top":"1rem", "margin-bottom":"1rem"}),
+            
+            html.H2('TimeGAN for EONIA-€STER transition', style = {"float": "center", "margin-top":"1rem", "margin-left": "4rem", "margin-right":"4rem", "margin-bottom":"1rem"}), 
+
+            html.Div([
+                html.Img(src='assets/github.png', style={"height":"40px", "margin-right":"2rem", "float":"right"}),
+                html.Button(html.A('View on Github', href="https://github.com/Larsterbraak/TimeGAN"), 
+                                    id='github', n_clicks=0, className="button-primary")                
+            ], className = 'row',  style = {"margin-right": "2rem", "float": "right", "margin-top":"1rem", "margin-bottom":"1rem"})
+            
+            ], style = NAVBAR_STYLE)
+
+app.layout = html.Div([dcc.Location(id="url"), navbar, html.Div([sidebar, content], className='row')], style={"background-color":"rgb(66, 75, 107)"})
+
+# app.layout = html.Div([
+#     html.H2('Hello World'),
+#     dcc.Dropdown(
+#         id='dropdown',
+#         options=[{'label': i, 'value': i} for i in ['LA', 'NYC', 'MTL']],
+#         value='LA'
+#     ),
+#     html.Div(id='display-value'),
+#     sidebar
+# ])
 
 app.css.append_css({"external_url": "https://codepen.io/chriddyp/pen/bWLwgP.css"})
 
