@@ -9,6 +9,7 @@ from pages import page_1
 from pages import page_2
 from pages import page_3
 
+#%%
 # external CSS stylesheets
 external_stylesheets = [
     'https://codepen.io/chriddyp/pen/bWLwgP.css',
@@ -20,6 +21,7 @@ external_stylesheets = [
     }
 ]
 
+#%%
 app = dash.Dash(__name__,
                 external_stylesheets=external_stylesheets,
                 #url_base_pathname= '/',
@@ -149,7 +151,7 @@ tabs = html.Div(dcc.Tabs(id = 'circos-control-tabs', value = 'what-is', children
                         commisioned by the Erasmus University Quantitative Finance department and \
                         performed by [Lars ter Braak](https://www.linkedin.com/in/lars-ter-braak/). Feel free to have a look around and play with \
                         the TimeGAN to simulate short rates and see the implications on fixed-income portfolios. \
-                        You can also check out my training scheme on [Tensorboard](https://tensorboard.dev/).''', style = {"padding":"5px"}),
+                        You can also check out my training scheme on [Tensorboard](https://tensorboard.dev/experiment/qi0Do7FMQpS5vC%20jVkIwBQg/).''', style = {"padding":"5px"}),
 
             dcc.Markdown('''
                         ###### On the first page you will find the current €STER short rate and the Value-at-Risk for different \
@@ -250,7 +252,7 @@ navbar = html.Nav(className = "navbar navbar-default navbar-static-top", childre
 
             html.Div([
                 html.Img(src='assets/github.png', style={"height":"40px", "margin-right":"2rem", "float":"right"}),
-                html.Button(html.A('View on Github', href="https://github.com/Larsterbraak/Master_Thesis"), 
+                html.Button(html.A('View on Github', href="https://github.com/Larsterbraak/TimeGAN"), 
                                     id='github', n_clicks=0, className="button-primary")                
             ], className = 'row',  style = {"margin-right": "2rem", "float": "right", "margin-top":"1rem", "margin-bottom":"1rem"})
             
