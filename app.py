@@ -25,9 +25,8 @@ external_stylesheets = [
     }
 ]
 
-app = dash.Dash(__name__,
-                external_stylesheets=external_stylesheets,
-                assets_url_path= '/assets/')
+app = dash.Dash(external_stylesheets=external_stylesheets)#,
+                #assets_url_path= '/assets/')
 #auth = dash_auth.BasicAuth(app,USERNAME_PASSWORD_PAIRS)
 server = app.server
 
@@ -147,7 +146,7 @@ tabs = html.Div(dcc.Tabs(id = 'circos-control-tabs', value = 'what-is', children
             html.H4("What is TimeGAN for short rates?", style = {"font-size":"24pt", "font-weight":"200", "letter-spacing":"1px"}),
 
             dcc.Markdown(''' 
-                        ###### This app is a demonstration of the MSc Thesis [TimeGAN for short rates](https://https://arxiv.org/) \
+                        ###### This app is a demonstration of the MSc Thesis [TimeGAN for short rates](https://papers.nips.cc/paper/8789-time-series-generative-adversarial-networks.pdf) \
                         commisioned by the Erasmus University Quantitative Finance department and \
                         performed by [Lars ter Braak](https://www.linkedin.com/in/lars-ter-braak/). Feel free to have a look around and play with \
                         the TimeGAN to simulate short rates and see the implications on fixed-income portfolios. \
