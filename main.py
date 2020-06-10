@@ -25,8 +25,8 @@ external_stylesheets = [
 app = dash.Dash(__name__,
                 external_stylesheets=external_stylesheets,
                 #url_base_pathname= '/',
-                #assets_url_path= '/assets/',
-                #assets_folder= os_path.join(os_path.dirname(os_path.abspath(__file__)), 'assets/')
+                assets_url_path= '/assets/',
+                assets_folder= os_path.join(os_path.dirname(os_path.abspath(__file__)), 'assets/')
                 )
 
 app.config.suppress_callback_exceptions = True
