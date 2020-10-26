@@ -28,7 +28,7 @@ app.scripts.config.serve_locally = False
 # the style arguments for the sidebar. We use position:fixed and a fixed width
 SIDEBAR_STYLE = {
     #"position": "fixed",
-    "top": "10rem",
+    "top": "5rem",
     "left": "4rem",
     "bottom": 0,
     "width": "30%",
@@ -81,6 +81,7 @@ TEST_STYLE = {
     "color": "rgb(226,239,250)",
     'border': '0.5px solid white',
     'font':'Helvetica',
+    "heigth":"1%",
 }
 
 TEST_STYLE_2 = {
@@ -112,6 +113,7 @@ tab_selected_style = {
     "color": "#7CD3F7",
     "borderTop":"3px solid #7CD3F7",
     'borderBottom':'0px solid #d6d6d6',
+    "heigth":"5%",
 }
 
 DROPDOWN_STYLE = {
@@ -136,26 +138,26 @@ tabs = html.Div(dcc.Tabs(id = 'circos-control-tabs', value = 'what-is', children
         style=TEST_STYLE, selected_style=tab_selected_style,
         children = html.Div(id = 'control-tab', children = [
             
-            html.H4("What is TimeGAN for short rates?", style = {"font-size":"24pt", "font-weight":"200", "letter-spacing":"1px"}),
+            #html.H4("What is TimeGAN for short rates?", style = {"font-size":"18pt", "font-weight":"200", "letter-spacing":"1px"}),
 
             dcc.Markdown(''' 
                         ###### This app is a demonstration of the MSc Thesis [TimeGAN for short rates](https://papers.nips.cc/paper/8789-time-series-generative-adversarial-networks.pdf) \
                         commisioned by the Erasmus University Quantitative Finance department and \
                         performed by [Lars ter Braak](https://www.linkedin.com/in/lars-ter-braak/). Feel free to have a look around and play with \
-                        the TimeGAN to simulate short rates and see the implications on fixed-income portfolios. \
-                        You can also check out my training scheme on [Tensorboard](https://tensorboard.dev/experiment/qi0Do7FMQpS5vC%20jVkIwBQg/).''', style = {"padding":"5px"}),
+                        the TimeGAN to simulate short rates and see the effect of the latent space. \
+                        You can also check out my training scheme on [Tensorboard](https://tensorboard.dev/experiment/kqNuBA7aR96gB07zuM7z5g).''', style = {"font-size":"4pt", "font-weight":"100", "letter-spacing":"1px"}),
 
             dcc.Markdown('''
                         ###### On the first page you will find the current €STER short rate and the Value-at-Risk for different \
-                        time periods according using the TimeGAN for short rates.''', style = {"padding":"3px"}),
+                        time periods according using the TimeGAN for short rates.''', style = {"font-size":"8pt", "font-weight":"10", "letter-spacing":"0.5px"}),
             
             dcc.Markdown('''
-                        ###### The second page will display the results section for the training of the TimeGAN.''', style = {"padding":"3px"}),
+                        ###### The second page will display the results section for the training of the TimeGAN.''', style = {"font-size":"8pt", "font-weight":"100", "letter-spacing":"1px"}),
 
             dcc.Markdown('''
                         ###### The third page show a practical application of the simulation of the €STER short rate. \
                         This page shows you a delta ladder for a fictious Interest Rate Swap portfolio. As a comparison, \
-                        the Vasicek and Hull-White short rate models are also displayed.''', style = {"padding":"3px"})
+                        the Vasicek and Hull-White short rate models are also displayed.''', style = {"font-size":"8pt", "font-weight":"100", "letter-spacing":"1px"})
         ])
     ),
 
@@ -216,7 +218,7 @@ tabs = html.Div(dcc.Tabs(id = 'circos-control-tabs', value = 'what-is', children
         )
 ]))
 
-options = html.Div(tabs, className = 'item-a', style={"margin-right":"10%", "margin-left":"10%", "margin-top":"3%"})
+options = html.Div(tabs, className = 'item-a', style={"margin-right":"3%", "margin-left":"3%", "margin-top":"3%"})
 
 sidebar = html.Div([
         options,
@@ -224,7 +226,7 @@ sidebar = html.Div([
 
 content = html.Div([dbc.Nav(children = [
 
-            dbc.NavLink("Interest rate risk in different fixed income portfolios", href="/page-1", id="page-1-link", style=TEST_STYLE_2),
+            dbc.NavLink("Latent space", href="/page-1", id="page-1-link", style=TEST_STYLE_2),
             dbc.NavLink("Interest rate risk", href="/page-2", id="page-2-link", style=TEST_STYLE_3),
             dbc.NavLink("TimeGAN training results", href="/page-3", id="page-3-link", style=TEST_STYLE_4)
     
@@ -280,15 +282,14 @@ def page_2_radios(value):
               [Input('url', 'pathname')])
 def render_page_content(pathname):
     if pathname == '/':
-        return html.Hr()
-        #return dbc.Jumbotron(
-        #[
-        #    html.Hr(),
-        #    dcc.Markdown('''
-        #                ###### Feel free to read up on this app on the left side of the page. \
-        #                If you are ready to dive into the TimeGAN, select one of the pages above.''', style = {"padding":"5px"}),
-        #], style = {"background-color":"rgb(38,43,61)"}
-    #)
+        return dbc.Jumbotron(
+        [
+           html.Hr(),
+           dcc.Markdown('''
+                       ###### Feel free to read up on this app on the left side of the page. \
+                       If you are ready to dive into the TimeGAN, select one of the pages above.''', style = {"padding":"5px"}),
+        ], style = {"background-color":"rgb(38,43,61)"}
+    )
     elif pathname == '/page-1':
         return page_1.page_1_layout
     elif pathname == '/page-2':
@@ -306,4 +307,4 @@ def render_page_content(pathname):
         ], style = {"background-color":"rgb(38,43,61)"})
 
 if __name__=='__main__':
-    app.run_server()
+    app.run_server(debug=True)
