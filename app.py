@@ -5,6 +5,9 @@ import dash_html_components as html
 from dash.dependencies import Input, Output, State
 import dash_bootstrap_components as dbc
 import tensorflow as tf
+from sklearn import preprocessing
+import pandas as pd
+import numpy as np
 
 from pages import page_1
 from pages import page_2
@@ -191,9 +194,9 @@ sidebar = html.Div([
 
 content = html.Div([dbc.Nav(children = [
 
-            dbc.NavItem(dbc.NavLink("1. Inner workings (math heavy)", active=False, href="/page-1", id="page-1-link")),         
-            dbc.NavItem(dbc.NavLink("2. Short rate simulation", active=False, href="/page-2", id="page-2-link")),
-            dbc.NavItem(dbc.NavLink("3. Inspect latent space", active=False, href="/page-3", id="page-3-link"))
+            dbc.NavItem(dbc.NavLink("1. Inner workings (math heavy)", active=False, href="/page-1", id="page-1-link", style={'font-weight':'bold'})),         
+            dbc.NavItem(dbc.NavLink("2. Short rate simulation", active=False, href="/page-2", id="page-2-link", style={'font-weight':'bold'})),
+            dbc.NavItem(dbc.NavLink("3. Inspect latent space", active=False, href="/page-3", id="page-3-link", style={'font-weight':'bold'}))
     
             ], pills=True, justified=True),
 

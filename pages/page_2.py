@@ -78,7 +78,7 @@ upperVaR = np.round(upperVaR, 4)
 lowerVaR = np.round(lowerVaR, 4)
 
 # Simulate 50 EONIA short rates as an example
-Z_mb = RandomGenerator(50, [20, hidden_dim])
+Z_mb = RandomGenerator(20, [20, hidden_dim])
 samples = recovery_model(generator_model(Z_mb)).numpy()
 reshaped_data = samples.reshape((samples.shape[0]*samples.shape[1], 
                                 samples.shape[2]))
@@ -95,59 +95,15 @@ dates2 = pd.date_range(start = '03-12-2018',
                      end = '31-12-2018',
                      periods = 20)
 
-# Create plot of 20-day simulations
-#fig2 = px.line(go.Scatter(x=dates2, y=simulations))
-fig2 = go.Figure()
-fig2.add_trace(go.Scatter(x=dates2, y=simulations,
-                    mode='lines',
-                    name='lines'))
+df5 = pd.DataFrame(simulations.T)
+df5['Date'] = dates2
 
-fig2.update_layout(yaxis_title = 'Simulation of short rate', xaxis_title = 'Date')
+fig2 = px.line(df5, x='Date', y=[x for x in range(20)])
+fig2.update_layout(yaxis_title = 'EONIA [%]', xaxis_title = 'Date', title='Simulations of EONIA using TimeGAN', title_x=0.5)
 fig2.update_layout({
-    'plot_bgcolor': 'rgba(0,0,0,0)',
+    'plot_bgcolor': 'rgba(255,255,255,0)',
     'paper_bgcolor': 'rgba(0,0,0,0)',
 })
-fig2.update_xaxes(
-    rangeslider_visible=True,
-    rangeselector=dict(
-        buttons=list([
-            dict(count=1, label="1m", step="month", stepmode="backward"),
-            dict(count=6, label="6m", step="month", stepmode="backward"),
-            dict(count=1, label="YTD", step="year", stepmode="todate"),
-            dict(count=1, label="1y", step="year", stepmode="backward"),
-            dict(step="all")
-        ])
-    )
-)
-
-# Create a second plot of the ESTER data
-df = pd.read_csv('data/df_full_pre_ester.csv', sep=';')
-df2 = pd.read_csv('data/EONIA_rate.csv', sep=';')
-
-dates = pd.date_range(start = '01-01-2017',
-                     end = '15-05-2020',
-                     periods = 649)
-fig = px.line(x=dates, y=df.WT)
-fig.update_layout(yaxis_title = 'Short rate', xaxis_title = 'Date')
-              
-fig.update_xaxes(
-    rangeslider_visible=True,
-    rangeselector=dict(
-        buttons=list([
-            dict(count=1, label="1m", step="month", stepmode="backward"),
-            dict(count=6, label="6m", step="month", stepmode="backward"),
-            dict(count=1, label="YTD", step="year", stepmode="todate"),
-            dict(count=1, label="1y", step="year", stepmode="backward"),
-            dict(step="all")
-        ])
-    )
-)
-
-fig.update_layout({
-    'plot_bgcolor': 'rgba(0,0,0,0)',
-    'paper_bgcolor': 'rgba(0,0,0,0)',
-})
-
 
 # Create Table with the VaR estimates
 VaRs = pd.DataFrame([np.append("TimeGAN - upper", upperVaR), 
@@ -160,29 +116,33 @@ VaRs.index=['TimeGAN with PLS+FM', 'Vasicek' ,'TimeGAN with PLS+FM', 'Vasicek']
 
 page_2_layout = html.Div([    
     
-    dcc.Markdown('''###### This figure shows ESTER simulations based on TimeGAN'''),
-    html.Div(id='page-1-content'),
+    dcc.Markdown('''###### The figure shows €STER simulations based on TimeGAN. \
+                Double click on one of lines to isolate a €STER simulation. \
+                Press the buttons for new simulations.'''),
+
+    dcc.Graph(figure = fig2), 
+    html.Div([html.Button(html.A('Simulate 10 EONIA paths', id='simulate_again_10', className="button-primary"), style={"margin-right":"1rem"}),
+              html.Button(html.A('Simulate 20 EONIA paths', id='simulate_again_20', className="button-primary"), style={"margin-right":"1rem"}),
+              html.Button(html.A('Simulate 100 EONIA paths', id='simulate_again_100', className="button-primary"))]),
+
+    dcc.Markdown('''###### The table below shows the Value-at-Risk for €STER based on \
+                 TimeGAN and 1-factor Vasicek for multiple T based on the €STER simulations.''', style = {"padding":"3px"}),
     
-    dcc.Graph(figure = fig2),
-
-    #dbc.Row(children=[dbc.Col(children=[latent_slider_1], className="col-md-8"),
-    #                      dbc.Col(children=["Slider for latent variable"], className="col-md-4")]),
-
-    dcc.Graph(figure = fig), 
-
-    dcc.Markdown('''
-                ###### 2.) Value-at-Risk for ESTER based on TimeGAN and 1-factor Vasicek.''', style = {"padding":"3px"}),
-    
-    dash_table.DataTable(
+    dbc.Row(dbc.Col(
+        dash_table.DataTable(
         id = 'VaR-table',
         data=VaRs.to_dict('records'),
         columns=[{'id': c, 'name': c} for c in VaRs.columns],
-
-        style_header={'backgroundColor': 'rgb(38, 43, 61)'},
+        style_header={'backgroundColor': 'rgb(21, 46, 64)',
+                      'fontWeight': 'bold',
+                      'border': '2px solid white'},
         style_cell={
             'backgroundColor': 'rgb(38, 43, 61)',
-            'color': 'white'
+            'color': 'white',
+            'padding': '5px',
         },
-    ),
+    ), width={'offset':2, 'size':8})),
+
+    html.Div(id='page-1-content')
 
 ], style={"margin-right":"2%", "margin-left":"2%"})
