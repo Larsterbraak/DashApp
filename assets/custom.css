@@ -632,3 +632,43 @@ a {
 ::-webkit-scrollbar-thumb:hover {
   background: #d8d8d870 !important;
 }
+
+.nav-pills .nav-link.active {
+  background-color: rgb(38,43,61);
+  border-right: 1px solid #ffffff;
+  border-left: 1px solid #ffffff;
+  border-top: 3px solid #7CD3F7;
+  border-bottom: 0px solid #d6d6d6;
+  height:50px;
+  color: #7CD3F7;
+  text-decoration: none;
+}
+
+.nav-pills a {
+  background-color: rgb(38,43,61);
+  border-right: 1px solid #ffffff;
+  border-left: 1px solid #ffffff;
+  border-top: 1px solid #ffffff;
+  border-bottom: 1px solid #ffffff;
+  height:50px;
+  color: #ffffff
+}
+
+.nav-pills a:hover {
+  color: #7CD3F7;
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.nav-pills .active a:hover {
+  color: #7CD3F7;
+  text-decoration: none;
+}
+.nav>li>a:hover, 
+.nav>li>a:focus {
+  color: #7CD3F7;
+  text-decoration: underline;
+  border-right: 1px solid #ffffff;
+  border-left: 1px solid #ffffff;
+  border-top: 1px solid #ffffff;
+  border-bottom: 1px solid #ffffff;
+}

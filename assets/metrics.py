@@ -30,11 +30,11 @@ import pandas as pd
 from scipy import stats
 
 def load_models(epoch, hparams, hidden_dim):        
-    from models.Discriminator import Discriminator
-    from models.Recovery import Recovery
-    from models.Generator import Generator
-    from models.Embedder import Embedder
-    from models.Supervisor import Supervisor
+    from assets.models.Discriminator import Discriminator
+    from assets.models.Recovery import Recovery
+    from assets.models.Generator import Generator
+    from assets.models.Embedder import Embedder
+    from assets.models.Supervisor import Supervisor
      
     if epoch % 50 != 0:
         return 'Only insert epochs that are divisible by 50.'

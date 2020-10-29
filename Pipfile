@@ -20,7 +20,9 @@ scikit-learn = "*"
 gunicorn = "*"
 dash-auth = "*"
 gevent = "*"
-tensorflow = "==2.1.0"
+tensorflow = "==2.2.0"
+matplotlib = "*"
+dash-defer-js-import = "*"
 
 [requires]
 python_version = "3.8"

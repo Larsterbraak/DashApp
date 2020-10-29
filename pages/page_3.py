@@ -1,11 +1,17 @@
 import dash
 import dash_core_components as dcc
+import dash_bootstrap_components as dbc
 import dash_html_components as html
 from dash.dependencies import Input, Output
 import dash_table
 import pandas as pd
 import plotly.express as px
 import plotly.graph_objs as go
+import tensorflow as tf
+import numpy as np
+
+tf.keras.backend.set_floatx('float64')
+tf.get_logger().setLevel('INFO')
 
 VaRs = pd.DataFrame([["TimeGAN", 0.19, 0.21, 0.18], ["Vasicek", 0.53, 0.75, 0.85], ["Hull-White", 1.21, 1.59, 1.52]])
 VaRs.columns=['Model', '10-days', '20-days', '50-days']
@@ -85,29 +91,45 @@ layout = dict(title = 'TSNE (T-Distributed Stochastic Neighbour Embedding)',
 
 fig2 = dict(data=data, layout=layout)
 
-page_3_layout = html.Div([
-    html.H4('Training results for TimeGAN', style = {"font-size":"24pt", "font-weight":"200", "letter-spacing":"1px"}),
-    
-    dcc.Markdown('''
-                ###### 1.) Train on Synthetic, Test on Real (TSTR) for VaR(99%) on short rates''', style = {"padding":"3px"}),
-    dcc.Graph(figure = fig),
+latent_slider_1 = dcc.Slider(id="latent_input_1", min=0, max=1, step=0.01, value=0.25, marks={x: f"{1*x:.0f}" for x in np.linspace(0, 1, 11)})
+latent_slider_2 = dcc.Slider(id="latent_input_2", min=0, max=1, step=0.01, value=0.25, marks={x: f"{1*x:.0f}" for x in np.linspace(0, 1, 11)})
+latent_slider_3 = dcc.Slider(id="latent_input_3", min=0, max=1, step=0.01, value=0.25, marks={x: f"{1*x:.0f}" for x in np.linspace(0, 1, 11)})
+latent_slider_4 = dcc.Slider(id="latent_input_4", min=0, max=1, step=0.01, value=0.25, marks={x: f"{1*x:.0f}" for x in np.linspace(0, 1, 11)})
 
-    dcc.Markdown('''
-                ###### 2.) Qualtitative assessment of difference between simulated and real short rates based on t-SNE''', style = {"padding":"3px"}),
-    dcc.Graph(figure = fig2),
+page_3_layout = html.Div([    
+    dcc.Markdown('''###### Use the sliders to adjust the latent spaces.'''),
+    
+    #dcc.Graph(figure = fig),
+
+    dbc.Row(children=[dbc.Col(children=[latent_slider_1], className="col-md-8"),
+                      dbc.Col(children=["Latent variable 1"], className="col-md-4")]),
+    
+    dbc.Row(children=[dbc.Col(children=[latent_slider_2], className="col-md-8"),
+                     dbc.Col(children=["Latent variable 2"], className="col-md-4")]),
+    
+    dbc.Row(children=[dbc.Col(children=[latent_slider_3], className="col-md-8"),
+                     dbc.Col(children=[html.Img(src='first_objective.png')], className="col-md-4")]),
+
+    dbc.Row(children=[dbc.Col(children=[latent_slider_4], className="col-md-8"),
+                     dbc.Col(children=["Latent variable 4"], className="col-md-4")]),
+
+    #dcc.Markdown('''
+    #            ###### 2.) Qualtitative assessment of difference between simulated and real short rates based on t-SNE''', style = {"padding":"3px"}),
+    #dcc.Graph(figure = fig2),
    
-    dcc.Markdown('''
+    #dcc.Markdown('''
                 ###### 3.) Discriminative score for an ad-hoc discriminator training''', style = {"padding":"3px"}),
-    dash_table.DataTable(
-        id = 'VaR-table',
-        data=VaRs.to_dict('records'),
-        columns=[{'id': c, 'name': c} for c in VaRs.columns],
+    
+    #dash_table.DataTable(
+    #    id = 'VaR-table',
+    #    data=VaRs.to_dict('records'),
+    #    columns=[{'id': c, 'name': c} for c in VaRs.columns],
         
-        style_cell={
-            'backgroundColor': 'rgb(38, 43, 61)',
-            'color': 'white'
-        },
-    ),
+    #    style_cell={
+    #        'backgroundColor': 'rgb(38, 43, 61)',
+    #        'color': 'white'
+    #    },
+    #),
 
     html.Div(id='page-3-content')
-], style={"margin-right":"10%", "margin-left":"10%"})
+], style={"margin-right":"2%", "margin-left":"2%"})

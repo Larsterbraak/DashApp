@@ -1,8 +1,10 @@
 import dash
 import dash_core_components as dcc
+import dash_bootstrap_components as dbc
 import dash_html_components as html
 from dash.dependencies import Input, Output, State
 import dash_bootstrap_components as dbc
+import tensorflow as tf
 
 from pages import page_1
 from pages import page_2
@@ -16,31 +18,37 @@ external_stylesheets = [
         'rel': 'stylesheet',
         'integrity': 'sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO',
         'crossorigin': 'anonymous'
-    }
+    },
+    #'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_CHTML'
 ]
 
 app = dash.Dash(__name__,
                 external_stylesheets=external_stylesheets)
+
+#mathjax = 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_CHTML'
+#app.scripts.append_script({ 'external_url' : mathjax })
+
 server = app.server
 app.config.suppress_callback_exceptions = True
-app.scripts.config.serve_locally = False
+app.scripts.config.serve_locally = True
 
-# the style arguments for the sidebar. We use position:fixed and a fixed width
+tf.keras.backend.set_floatx('float64')
+tf.get_logger().setLevel('INFO')
+
 SIDEBAR_STYLE = {
-    #"position": "fixed",
-    "top": "5rem",
+    "top": "4rem",
     "left": "4rem",
     "bottom": 0,
     "width": "30%",
-    "margin-left": "4rem",
-    "margin-right": "2rem",
+    "margin-left": "2%",
+    "margin-right": "0.5%",
     "padding": "2rem 1rem",
     "background-color": "rgb(38,43,61)",
     "color": "rgb(226,239,250)",
     'border': '1px solid rgb(38,43,61)',
     'borderRadius': '15px',
     'overflow': 'hidden',
-    'font':{"family":'Helvetica', "size":"12"}
+    'font':{"family":'Helvetica', "size":"10"}
 }
 
 # the styles for the main content position it to the right of the sidebar and
@@ -49,10 +57,10 @@ CONTENT_STYLE = {
     "top": "10rem",
     "left": 0,
     "right": 0,
-    "margin-left": "1rem",
-    "margin-right": "1rem",
+    "margin-left": "1%",
+    "margin-right": "2%",
     "padding": "2rem 1rem",
-    "width": "60%",
+    "width": "64%",
     "background-color": "rgb(38,43,61)",
     "color": "rgb(226,239,250)",
     'border': '1px solid rgb(38,43,61)',
@@ -65,7 +73,7 @@ NAVBAR_STYLE = {
     "margin-left":"1rem",
     "margin-right": "1rem",
     "margin-bottom": "1rem",
-    "margin-top": "1rem",
+    "margin-top": "0rem",
     "width":"98%",
     "padding":"0.1rem 0.1rem",
     "background-color": "rgb(38,43,61)",
@@ -86,11 +94,15 @@ TEST_STYLE = {
 
 TEST_STYLE_2 = {
     "background-color": "rgb(38,43,61)",
-    "color": "rgb(226,239,250)",
+    "color": "#7CD3F7",
     'borderRight': '0.5px solid white',
+    'borderLeft': '0.5px solid white',
     "float":"center",
-    "margin-left":"10%",
-    "heigth":"5%",
+    'font':'Helvetica',
+    "margin-left":"5%",
+    "borderTop":"3px solid #7CD3F7",
+    'borderBottom':'0px solid #d6d6d6',
+    "heigth":"250px",
 }
 
 TEST_STYLE_3 = {
@@ -98,14 +110,21 @@ TEST_STYLE_3 = {
     "color": "rgb(226,239,250)",
     'borderRight': '0.5px solid white', 
     "float":"center",
-    "heigth":"5%",
+    'font':'Helvetica',
+    "borderTop":"0.5px solid #d6d6d6",
+    'borderBottom':'0.5px solid #d6d6d6',
+    "heigth":"250px",
 }
 
 TEST_STYLE_4 = {
     "background-color": "rgb(38,43,61)",
     "color": "rgb(226,239,250)",
     "float":"center",
-    "heigth":"5%",
+    "heigth":"250px",
+    "borderTop":"0.5px solid #d6d6d6",
+    'font':'Helvetica',
+    'borderBottom':'0.5px solid #d6d6d6',
+    'borderRight': '0.5px solid white', 
 }
 
 tab_selected_style = {
@@ -137,88 +156,34 @@ tabs = html.Div(dcc.Tabs(id = 'circos-control-tabs', value = 'what-is', children
         value = 'what-is',
         style=TEST_STYLE, selected_style=tab_selected_style,
         children = html.Div(id = 'control-tab', children = [
-            
-            #html.H4("What is TimeGAN for short rates?", style = {"font-size":"18pt", "font-weight":"200", "letter-spacing":"1px"}),
-
             dcc.Markdown(''' 
-                        ###### This app is a demonstration of the MSc Thesis [TimeGAN for short rates](https://papers.nips.cc/paper/8789-time-series-generative-adversarial-networks.pdf) \
+                        ###### This webapp is a demonstration of the MSc Thesis [TimeGAN for short rates](https://github.com/Larsterbraak/TimeGAN-short-rates/blob/master/Thesis.pdf) \
                         commisioned by the Erasmus University Quantitative Finance department and \
-                        performed by [Lars ter Braak](https://www.linkedin.com/in/lars-ter-braak/). Feel free to have a look around and play with \
-                        the TimeGAN to simulate short rates and see the effect of the latent space. \
-                        You can also check out my training scheme on [Tensorboard](https://tensorboard.dev/experiment/kqNuBA7aR96gB07zuM7z5g).''', style = {"font-size":"4pt", "font-weight":"100", "letter-spacing":"1px"}),
-
-            dcc.Markdown('''
-                        ###### On the first page you will find the current €STER short rate and the Value-at-Risk for different \
-                        time periods according using the TimeGAN for short rates.''', style = {"font-size":"8pt", "font-weight":"10", "letter-spacing":"0.5px"}),
-            
-            dcc.Markdown('''
-                        ###### The second page will display the results section for the training of the TimeGAN.''', style = {"font-size":"8pt", "font-weight":"100", "letter-spacing":"1px"}),
-
-            dcc.Markdown('''
-                        ###### The third page show a practical application of the simulation of the €STER short rate. \
-                        This page shows you a delta ladder for a fictious Interest Rate Swap portfolio. As a comparison, \
-                        the Vasicek and Hull-White short rate models are also displayed.''', style = {"font-size":"8pt", "font-weight":"100", "letter-spacing":"1px"})
-        ])
+                        performed by [Lars ter Braak](https://www.linkedin.com/in/lars-ter-braak/). Feel free to have a look around and use \
+                        the TimeGAN to simulate short rates or see the effect of the latent space. \
+                        You can check a visualization of the Tensorflow training for the best TimeGAN model on [Tensorboard](https://tensorboard.dev/experiment/kqNuBA7aR96gB07zuM7z5g).''', style = {"font-size":"4pt", "font-weight":"100", "letter-spacing":"1px"}),
+            ])
     ),
 
     dcc.Tab(
-            label = 'Use own data',
+            label = 'Contents',
             value = 'data',      
             style=TEST_STYLE, selected_style=tab_selected_style,
             
             children = html.Div(className = 'circos-tab', children = [
-                
-                html.H4("Use your own short rate data?", style = {"font-size":"24pt", "font-weight":"200", "letter-spacing":"1px"}),
-                
+
                 dcc.Markdown('''
-                            ###### For research purposes it would be helpful if you specify for \
-                            which region and for what term you intend to use the TimeGAN for short rates.''', style = {"padding":"3px"}),
-
-                html.Div(className = 'app-controls-block', children= [
-                    
-                    html.H4("Region", style = {"font-size":"18pt", "font-weight":"200", "letter-spacing":"1px"}),
-                    
-                    html.Div(dcc.Dropdown(
-                        id = "cmap",
-                        options=[{'label': i, 'value': i} for i in ['US', 'EU', 'Asia', 'Other']])
-                    ),
-
-                    html.H4("Term of rate", style = {"font-size":"18pt", "font-weight":"200", "letter-spacing":"1px"}),
-                    
-                    html.Div(dcc.Dropdown(
-                        id = "background",
-                        options=[{'label': i, 'value': i} for i in ['< 1M', '1M < x < 6M', '> 6M']],
-                        className = 'select-control'),
-                    ),
-
-                    dcc.Markdown('''
-                                ###### Your file must be in .xlsx or .csv file format to be working. Please upload the file below.''', style = {"padding":"5px"}),
-
-                    dcc.Upload(id='upload-data',
-                                children=html.Div([
-                                    'Drag and Drop or ',
-                                    html.A('Select Files', style={"borderBottom":"1px solid white"})
-                                ]),
-                                style={
-                                    'width': '100%',
-                                    'height': '60px',
-                                    'lineHeight': '60px',
-                                    'borderWidth': '1px',
-                                    'borderStyle': 'dashed',
-                                    'borderRadius': '5px',
-                                    'textAlign': 'center',
-                                    'margin': '10px'
-                                },
-                                # Allow multiple files to be uploaded
-                                multiple=True
-                            ),
-                            html.Div(id='output-data-upload'),
+                             ###### On page "1. Inner workings" we describe the Generative Adversarial Network (GAN) \
+                             and discuss the TimeGAN model. On page "2. Short rate simulations" we shows a tool to simulate EONIA or €STER using \
+                             the TimeGAN model and compare the performance to baseline models. On page "3. Inspect latent space" we show a tool to check the \
+                             effect of the latent variables on the short rate simulations. Play around and see what type of short rate TimeGAN can produce. \
+                             ''', style = {"font-size":"8pt", "font-weight":"10", "letter-spacing":"0.5px"}),
+        
                 ])
-            ])
         )
 ]))
 
-options = html.Div(tabs, className = 'item-a', style={"margin-right":"3%", "margin-left":"3%", "margin-top":"3%"})
+options = html.Div(tabs, className = 'item-a', style={"margin-right":"3%", "margin-left":"3%", "margin-top":"1%"})
 
 sidebar = html.Div([
         options,
@@ -226,11 +191,11 @@ sidebar = html.Div([
 
 content = html.Div([dbc.Nav(children = [
 
-            dbc.NavLink("Latent space", href="/page-1", id="page-1-link", style=TEST_STYLE_2),
-            dbc.NavLink("Interest rate risk", href="/page-2", id="page-2-link", style=TEST_STYLE_3),
-            dbc.NavLink("TimeGAN training results", href="/page-3", id="page-3-link", style=TEST_STYLE_4)
+            dbc.NavItem(dbc.NavLink("1. Inner workings (math heavy)", active=False, href="/page-1", id="page-1-link")),         
+            dbc.NavItem(dbc.NavLink("2. Short rate simulation", active=False, href="/page-2", id="page-2-link")),
+            dbc.NavItem(dbc.NavLink("3. Inspect latent space", active=False, href="/page-3", id="page-3-link"))
     
-            ], fill=True, style={"padding":"15px"}),
+            ], pills=True, justified=True),
 
             html.Div(id="page-content")
         ], style=CONTENT_STYLE)
@@ -239,19 +204,22 @@ navbar = html.Nav(className = "navbar navbar-default navbar-static-top", childre
             html.Div([
                 html.Button(html.A('Check out my LinkedIn', href="https://www.linkedin.com/in/lars-ter-braak/"),
                                     id='linked_in', n_clicks=0, className="button-primary"),
+                html.Img(src='assets/linkedin_icon.png', style={"height":"40px", "margin-left":"2rem", "float":"left"}),
             ], className = 'row',  style = {"float":"left", "margin-left": "2rem", "margin-top":"1rem", "margin-bottom":"1rem"}),
             
-            html.H2('TimeGAN for EONIA-€STER transition', style = {"float": "center", "margin-top":"1rem", "margin-left": "4rem", "margin-right":"4rem", "margin-bottom":"1rem"}), 
+            html.H2('TimeGAN for EONIA-€STER transition', style = {"float": "center", 'font':'Helvetica', "margin-top":"1rem", "margin-left": "4rem", "margin-right":"4rem", "margin-bottom":"1rem"}), 
 
             html.Div([
                 html.Img(src='assets/github.png', style={"height":"40px", "margin-right":"2rem", "float":"right"}),
-                html.Button(html.A('View on Github', href="https://github.com/Larsterbraak/TimeGAN"), 
+                html.Button(html.A('View on Github', href="https://github.com/Larsterbraak/TimeGAN-short-rates"), 
                                     id='github', n_clicks=0, className="button-primary")                
             ], className = 'row',  style = {"margin-right": "2rem", "float": "right", "margin-top":"1rem", "margin-bottom":"1rem"})
             
             ], style = NAVBAR_STYLE)
 
 app.layout = html.Div([dcc.Location(id="url"), navbar, html.Div([sidebar, content], className='row')], style={"background-color":"rgb(66, 75, 107)"})
+
+app.title = 'TimeGAN for short rates'
 
 # this callback uses the current pathname to set the active state of the
 # corresponding nav link to true, allowing users to tell see page they are on
@@ -284,10 +252,9 @@ def render_page_content(pathname):
     if pathname == '/':
         return dbc.Jumbotron(
         [
-           html.Hr(),
            dcc.Markdown('''
                        ###### Feel free to read up on this app on the left side of the page. \
-                       If you are ready to dive into the TimeGAN, select one of the pages above.''', style = {"padding":"5px"}),
+                       If you are ready to dive into the TimeGAN, select one of the pages above. ''', style = {"padding":"5px"}),
         ], style = {"background-color":"rgb(38,43,61)"}
     )
     elif pathname == '/page-1':
