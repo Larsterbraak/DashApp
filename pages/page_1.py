@@ -31,22 +31,24 @@ page_1_layout = html.Div(children=[
     dbc.Row([dbc.Col(html.Div(html.Img(src='assets/reconstruction_loss.png', style={'width':'100%'})), width={"offset":1, 'size':5}),
             dbc.Col(html.Div(html.Img(src='assets/supervised_loss.png', style={'width':'100%'})), width={"offset":0, 'size':5})]),
 
-    dcc.Markdown('''###### Equation (4) shows objective 1 and Equation (5) the GAN objective.'''),
+    dcc.Markdown('''###### Equation (4) shows objective for the Autoencoder and Supervisor and Equation (5) show the objective \
+                 for the GAN and Supervisor.'''),
 
-    dbc.Row([dbc.Col(html.Div(html.Img(src='assets/first_objective.png', style={'width':'90%'})), width={"offset":1, 'size':5}),
+    dbc.Row([dbc.Col(html.Div(html.Img(src='assets/first_objective.png', style={'width':'85%'})), width={"offset":1, 'size':5}),
             dbc.Col(html.Div(html.Img(src='assets/second_objective.png', style={'width':'100%'})), width={"offset":0, 'size':5})]),
 
-    dcc.Markdown('''###### Equation (6) shows the unsupervised loss. In the study, we evaluate a different \
-                 unsupervised loss metric. We implement the Wasserstein loss shown in Equation (7). This \
-                 results in the new objective in Eq. (8).'''),
+    dcc.Markdown('''###### Equation (6) shows the normal unsupervised loss, i.e. negative cross-entropy.'''),
 
     html.Div(html.Img(src='assets/negative_entropy_loss.png', style={'width':'90%'})),
-    html.Div(html.Img(src='assets/wasserstein_loss.png', style={'width':'90%'})),
-    html.Div(html.Img(src='assets/wasserstein_gan.png', style={'width':'90%'})),
 
-    dcc.Markdown(''' ###### We also add Feature Matching shown in Eq. (9) as a penalization for mode collapse. \
-                 The new objective now becomes Eq. (10).'''),
-    html.Div(html.Img(src='assets/feature_matching_loss.png', style={'width':'90%'})),
+    dcc.Markdown('''###### In this study, we also evaluate a different unsupervised loss. \
+                 We implement the Wasserstein-1 loss with Gradient Penalty shown in Equation (7). '''),
+    dbc.Row(dbc.Col(html.Div(html.Img(src='assets/wasserstein_loss.png', style={'width':'90%'})), width={'offset':1})),
+
+    dcc.Markdown(''' ###### We also evaluate Feature Matching as shown in Eq. (9) as a penalization for mode collapse.'''),
+    dbc.Row(dbc.Col(html.Div(html.Img(src='assets/feature_matching_loss.png', style={'width':'90%'})), width={'offset':1})),
+
+    dcc.Markdown(''' ###### The Feature Matching loss is added to the second objective of TimeGAN.'''),
     html.Div(html.Img(src='assets/feature_matching_gan.png', style={'width':'80%'})),
 
     dcc.Markdown(''' ###### The figure on the left shows the block diagram of \
@@ -54,8 +56,6 @@ page_1_layout = html.Div(children=[
 
     html.Div([html.Img(src='assets/block_diagram.png', style={'width':'45%'}),
               html.Img(src='assets/training_schema.png', style={'width':'51%'})]),
-
-    #dcc.Markdown(''' ###### 1.) Delta ladder for a fictitious fixed income portfolio''', style = {"padding":"3px"}),
     
     #dcc.Graph(
     #   id = 'delta-ladder',
