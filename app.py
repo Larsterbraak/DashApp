@@ -4,14 +4,17 @@ import dash_bootstrap_components as dbc
 import dash_html_components as html
 from dash.dependencies import Input, Output, State
 import dash_bootstrap_components as dbc
-import tensorflow as tf
 from sklearn import preprocessing
 import pandas as pd
 import numpy as np
+import plotly.express as px
 
 from pages import page_1
 from pages import page_2
 from pages import page_3
+
+from assets.training import RandomGenerator
+from assets.metrics import load_models
 
 # external CSS stylesheets
 external_stylesheets = [
@@ -34,9 +37,6 @@ app = dash.Dash(__name__,
 server = app.server
 app.config.suppress_callback_exceptions = True
 app.scripts.config.serve_locally = True
-
-tf.keras.backend.set_floatx('float64')
-tf.get_logger().setLevel('INFO')
 
 SIDEBAR_STYLE = {
     "top": "4rem",
@@ -222,7 +222,7 @@ navbar = html.Nav(className = "navbar navbar-default navbar-static-top", childre
 
 app.layout = html.Div([dcc.Location(id="url"), navbar, html.Div([sidebar, content], className='row')], style={"background-color":"rgb(66, 75, 107)"})
 
-app.title = 'TimeGAN for short rates'
+app.title = 'TimeGAN for short rates | Lars ter Braak'
 
 # this callback uses the current pathname to set the active state of the
 # corresponding nav link to true, allowing users to tell see page they are on
@@ -235,18 +235,6 @@ def toggle_active_links(pathname):
         # Treat page 1 as the homepage / index
         return True, False, False
     return [pathname == f"/page-{i}" for i in range(1, 4)]
-
-# Callback for dropdown menu page 1
-@app.callback(dash.dependencies.Output('page-1-content', 'children'),
-              [dash.dependencies.Input('page-1-dropdown', 'value')])
-def page_1_dropdown(value):
-    return 'Currently showing the "{}" short rate'.format(value)
-
-# Callback for dropdown menu page 2
-@app.callback(Output('page-2-content', 'children'),
-              [Input('page-2-radios', 'value')])
-def page_2_radios(value):
-    return 'Currently showing the "{}" short rate.'.format(value)
 
 # Index Page callback
 @app.callback(Output('page-content', 'children'),

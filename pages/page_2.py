@@ -120,10 +120,11 @@ page_2_layout = html.Div([
                 Double click on one of lines to isolate a €STER simulation. \
                 Press the buttons for new simulations.'''),
 
-    dcc.Graph(figure = fig2), 
     html.Div([html.Button(html.A('Simulate 10 EONIA paths', id='simulate_again_10', className="button-primary"), style={"margin-right":"1rem"}),
               html.Button(html.A('Simulate 20 EONIA paths', id='simulate_again_20', className="button-primary"), style={"margin-right":"1rem"}),
               html.Button(html.A('Simulate 100 EONIA paths', id='simulate_again_100', className="button-primary"))]),
+    
+    dcc.Graph(figure = fig2), 
 
     dcc.Markdown('''###### The table below shows the Value-at-Risk for €STER based on \
                  TimeGAN and 1-factor Vasicek for multiple T based on the €STER simulations.''', style = {"padding":"3px"}),
