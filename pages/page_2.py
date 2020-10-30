@@ -11,6 +11,7 @@ import numpy as np
 import datetime
 from sklearn import preprocessing
 import tensorflow as tf
+#from app import app
 
 tf.get_logger().setLevel('ERROR')
 
@@ -99,7 +100,7 @@ df5 = pd.DataFrame(simulations.T)
 df5['Date'] = dates2
 
 fig2 = px.line(df5, x='Date', y=[x for x in range(20)])
-fig2.update_layout(yaxis_title = 'EONIA [%]', xaxis_title = 'Date', title='Simulations of EONIA using TimeGAN', title_x=0.5)
+fig2.update_layout(yaxis_title = 'daily difference EONIA', xaxis_title = 'Date', title='Simulations of EONIA using TimeGAN', title_x=0.5)
 fig2.update_layout({
     'plot_bgcolor': 'rgba(255,255,255,0)',
     'paper_bgcolor': 'rgba(0,0,0,0)',
@@ -120,11 +121,15 @@ page_2_layout = html.Div([
                 Double click on one of lines to isolate a €STER simulation. \
                 Press the buttons for new simulations.'''),
 
-    html.Div([html.Button(html.A('Simulate 10 EONIA paths', id='simulate_again_10', className="button-primary"), style={"margin-right":"1rem"}),
+    html.Div([html.Button(html.A('Simulate 1 EONIA path', id='simulate_again_1', className="button-primary"), style={"margin-right":"1rem", "float":'left'}),
               html.Button(html.A('Simulate 20 EONIA paths', id='simulate_again_20', className="button-primary"), style={"margin-right":"1rem"}),
-              html.Button(html.A('Simulate 100 EONIA paths', id='simulate_again_100', className="button-primary"))]),
+              html.Button(html.A('Simulate 100 EONIA paths', id='simulate_again_100', className="button-primary"), style={"margin-right":"1rem", "float":"right"})]),
     
     dcc.Graph(figure = fig2), 
+
+    html.Div(id='page-2-button-1'),
+    html.Div(id='page-2-button-2'),
+    html.Div(id='page-2-button-3'),
 
     dcc.Markdown('''###### The table below shows the Value-at-Risk for €STER based on \
                  TimeGAN and 1-factor Vasicek for multiple T based on the €STER simulations.''', style = {"padding":"3px"}),
@@ -147,3 +152,13 @@ page_2_layout = html.Div([
     html.Div(id='page-1-content')
 
 ], style={"margin-right":"2%", "margin-left":"2%"})
+
+# @app.callback(
+#     Output(component_id='page-2-button-1', component_property='children'),
+#     [Input(component_id='simulate_again_1', component_property='n_clicks')]
+# )
+# def update_output(n_clicks):
+#     if n_clicks is None:
+#         return "Nothing happend yet"
+#     else:
+#         return "Elephants are the only animal that can't jump"

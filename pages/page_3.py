@@ -14,7 +14,7 @@ import numpy as np
 from assets.metrics import load_models
 from dash.dependencies import Input, Output
 
-from app import app
+#from app import app
 
 tf.get_logger().setLevel('ERROR')
 
@@ -72,19 +72,19 @@ fig2.update_layout({
     'paper_bgcolor': 'rgba(0,0,0,0)',
 })
 
-latent_slider_1 = dcc.Slider(id="latent_input_1", min=0, max=1, step=0.01, value=0.8, marks={x: f"{1*x:.2f}" for x in np.linspace(0, 1, 11)})
-latent_slider_2 = dcc.Slider(id="latent_input_2", min=0, max=1, step=0.01, value=0.0, marks={x: f"{1*x:.2f}" for x in np.linspace(0, 1, 11)})
-latent_slider_3 = dcc.Slider(id="latent_input_3", min=0, max=1, step=0.01, value=0.0, marks={x: f"{1*x:.2f}" for x in np.linspace(0, 1, 11)})
-latent_slider_4 = dcc.Slider(id="latent_input_4", min=0, max=1, step=0.01, value=0.0, marks={x: f"{1*x:.2f}" for x in np.linspace(0, 1, 11)})
+latent_slider_1 = dcc.Slider(id='latent-input-1', min=0, max=1, step=0.01, value=0.5, marks={x: f"{1*x:.2f}" for x in np.linspace(0, 1, 11)})
+latent_slider_2 = dcc.Slider(id="latent-input-2", min=0, max=1, step=0.01, value=0.5, marks={x: f"{1*x:.2f}" for x in np.linspace(0, 1, 11)})
+latent_slider_3 = dcc.Slider(id="latent-input-3", min=0, max=1, step=0.01, value=0.5, marks={x: f"{1*x:.2f}" for x in np.linspace(0, 1, 11)})
+latent_slider_4 = dcc.Slider(id="latent-input-4", min=0, max=1, step=0.01, value=0.5, marks={x: f"{1*x:.2f}" for x in np.linspace(0, 1, 11)})
 
 page_3_layout = html.Div([    
     dcc.Markdown('''###### This figure shows the ESTER simulation conditioned on a specific latent space. \
                  Use the sliders below to adjust the latent spaces and see the effect.'''),
     
-    #dcc.Graph(figure = fig2, style={'padding':'0', 'margin-bottom':'0%'}),
+    dcc.Graph(figure = fig2, style={'padding':'0', 'margin-bottom':'0%'}),
 
-    #dcc.Graph(id='test-figure', style={'padding':'0', 'margin-bottom':'3%'}),
-    
+    #dcc.Graph(id='test-figure-123'),
+
     dbc.Row(children=[dbc.Col(children=[latent_slider_1], className="col-md-11"),
                       dbc.Col(html.Img(src='assets/latent_var_1.png', style={'width':'80%'}))]),
     
@@ -97,37 +97,15 @@ page_3_layout = html.Div([
     dbc.Row(children=[dbc.Col(children=[latent_slider_4], className="col-md-11"),
                      dbc.Col(html.Img(src='assets/latent_var_4.png', style={'width':'80%'}))]),
 
-    html.Div(id='test-value'),
-
     html.Div(id='page-3-content')
 ], style={"margin-right":"2%", "margin-left":"2%"})
 
-@app.callback(Output('test-value', 'children'),
-             [Input('latent_input_1', 'value')])
-def update_output_num(value):
-    return 'Output: {}'.format(value)
-
-# @app.callback(Output('test-figure', 'figure'),
-#              [Input('latent_input_1', 'value'),
-#               Input('latent_input_2', 'value'),
-#               Input('latent_input_3', 'value'),
-#               Input('latent_input_4', 'value')])
-# def update_output(latent_input_1, latent_input_2, latent_input_3, latent_input_4):
-
-#     # We import the data until 6-10-2017
-#     df = pd.read_csv("data/Master_EONIA.csv", sep=";")
-#     df = df.iloc[:, 1:] # Remove the Date variable from the dataset
-#     df.EONIA[1:] = np.diff(df.EONIA)
-#     df = df.iloc[1:, :]
-#     scaler = preprocessing.MinMaxScaler().fit(df)
-
-#     # Define the settings
-#     hparams = []
-#     hidden_dim = 4
-
-#     # Import the pre-trained models
-#     _, recovery_model, _, generator_model, _ = load_models(8250, hparams, hidden_dim)
-
+# @page_3_layout.callback(Output(component_id='test-figure-123', component_property='figure'),
+#                         [Input('latent-input-1', 'value'),
+#                          Input('latent-input-2', 'value'),
+#                          Input('latent-input-3', 'value'),
+#                          Input('latent-input-4', 'value')])
+# def update_figure(value):
 #     # Fix the random generator at a specific point
 #     Z_mb = np.zeros(shape=(1000, 20, hidden_dim))
 
@@ -135,10 +113,10 @@ def update_output_num(value):
 #     latent_space = generator_model(Z_mb).numpy()
 
 #     # Adjust the dimensions of the latent space
-#     latent_space[:, :, 0] = latent_space[:, :, 0] + latent_input_1.astype(np.float64)
-#     latent_space[:, :, 1] = latent_space[:, :, 0] + latent_input_2.astype(np.float64)
-#     latent_space[:, :, 2] = latent_space[:, :, 0] + latent_input_3.astype(np.float64)
-#     latent_space[:, :, 3] = latent_space[:, :, 0] + latent_input_4.astype(np.float64)
+#     latent_space[:, :, 0] = latent_space[:, :, 0] + value[0].astype(np.float64)
+#     latent_space[:, :, 1] = latent_space[:, :, 0] + value[1].astype(np.float64)
+#     latent_space[:, :, 2] = latent_space[:, :, 0] + value[2].astype(np.float64)
+#     latent_space[:, :, 3] = latent_space[:, :, 0] + value[3].astype(np.float64)
 
 #     # Produce the samples
 #     samples = recovery_model(latent_space).numpy()
