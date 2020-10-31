@@ -20,7 +20,7 @@ scikit-learn = "*"
 gunicorn = "*"
 dash-auth = "*"
 gevent = "*"
-tensorflow = "==2.2.0"
+tensorflow = "*"
 matplotlib = "*"
 dash-defer-js-import = "*"
 

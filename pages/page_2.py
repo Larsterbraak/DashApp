@@ -121,9 +121,9 @@ page_2_layout = html.Div([
                 Double click on one of lines to isolate a €STER simulation. \
                 Press the buttons for new simulations.'''),
 
-    html.Div([html.Button(html.A('Simulate 1 EONIA path', id='simulate_again_1', className="button-primary"), style={"margin-right":"1rem", "float":'left'}),
-              html.Button(html.A('Simulate 20 EONIA paths', id='simulate_again_20', className="button-primary"), style={"margin-right":"1rem"}),
-              html.Button(html.A('Simulate 100 EONIA paths', id='simulate_again_100', className="button-primary"), style={"margin-right":"1rem", "float":"right"})]),
+    html.Div([html.Button(html.A('Simulate 1 EONIA path', id='simulate_again_1', className="button-primary")),
+              html.Button(html.A('Simulate 20 EONIA paths', id='simulate_again_20', className="button-primary")),
+              html.Button(html.A('Simulate 100 EONIA paths', id='simulate_again_100', className="button-primary"))], style={'display':'inline-block'}),
     
     dcc.Graph(figure = fig2), 
 
