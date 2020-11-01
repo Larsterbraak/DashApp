@@ -11,6 +11,8 @@ import numpy as np
 import datetime
 from sklearn import preprocessing
 import tensorflow as tf
+from dash_table.Format import Format, Scheme
+
 #from app import app
 
 tf.get_logger().setLevel('ERROR')
@@ -79,7 +81,7 @@ upperVaR = np.round(upperVaR, 4)
 lowerVaR = np.round(lowerVaR, 4)
 
 # Simulate 50 EONIA short rates as an example
-Z_mb = RandomGenerator(20, [20, hidden_dim])
+Z_mb = RandomGenerator(10, [20, hidden_dim])
 samples = recovery_model(generator_model(Z_mb)).numpy()
 reshaped_data = samples.reshape((samples.shape[0]*samples.shape[1], 
                                 samples.shape[2]))
@@ -92,28 +94,42 @@ simulations = scaled_reshaped_data.reshape(((samples.shape[0],
 # Only get the EONIA simulations
 simulations = simulations[:, :, 8]
 
-dates2 = pd.date_range(start = '03-12-2018',
-                     end = '31-12-2018',
+dates2 = pd.date_range(start = '12-03-2018',
+                     end = '12-31-2018',
                      periods = 20)
 
 df5 = pd.DataFrame(simulations.T)
 df5['Date'] = dates2
 
-fig2 = px.line(df5, x='Date', y=[x for x in range(20)])
-fig2.update_layout(yaxis_title = 'daily difference EONIA', xaxis_title = 'Date', title='Simulations of EONIA using TimeGAN', title_x=0.5)
+fig2 = px.line(df5, x='Date', y=[x for x in range(10)])
+fig2.update_layout(yaxis_title = 'Daily difference EONIA', xaxis_title = 'Date', 
+                   title={'text':'Simulations of EONIA using TimeGAN', 'x':0.5, 'font':dict(color='white')}),
+
+fig2.update_layout(
+    legend={'title':{'text':'Simulation', 'font':dict(color='white')}, 'font':dict(color='white')},
+    yaxis_color = 'white',
+    xaxis_color = 'white'
+),
+
 fig2.update_layout({
     'plot_bgcolor': 'rgba(255,255,255,0)',
     'paper_bgcolor': 'rgba(0,0,0,0)',
 })
 
+fig2.update_xaxes(tickfont=dict(color='white')),
+fig2.update_yaxes(tickfont=dict(color='white')),
+
 # Create Table with the VaR estimates
-VaRs = pd.DataFrame([np.append("TimeGAN - upper", upperVaR), 
+VaRs = pd.DataFrame([np.append("TimeGAN with PLS+FM - upper", upperVaR), 
                     np.append("Vasicek - upper", upperVasicek),
                     np.append("TimeGAN with PLS+FM - lower", lowerVaR), 
                     np.append("Vasicek - lower", lowerVasicek)])
 
-VaRs.columns=['Model', '1 day', '10 days', '20 days']
+# Rename the columns and rows
+VaRs.columns=['Model \ T', '1 day', '10 days', '20 days']
 VaRs.index=['TimeGAN with PLS+FM', 'Vasicek' ,'TimeGAN with PLS+FM', 'Vasicek']
+
+pd.options.display.float_format = '${:.2f}'.format
 
 page_2_layout = html.Div([    
     
@@ -121,15 +137,15 @@ page_2_layout = html.Div([
                 Double click on one of lines to isolate a €STER simulation. \
                 Press the buttons for new simulations.'''),
 
-    html.Div([html.Button(html.A('Simulate 1 EONIA path', id='simulate_again_1', className="button-primary")),
-              html.Button(html.A('Simulate 20 EONIA paths', id='simulate_again_20', className="button-primary")),
-              html.Button(html.A('Simulate 100 EONIA paths', id='simulate_again_100', className="button-primary"))], style={'display':'inline-block'}),
+    dbc.Row([dbc.Col(html.Div(id='page-2-button-1')),
+            dbc.Col(html.Div(id='page-2-button-2')),
+            dbc.Col(html.Div(id='page-2-button-3'))]),
+
+    html.Div([html.Button(html.A('Simulate 1 EONIA path'), id='simulate_again_1', n_clicks=0, style={'margin-right':'1rem'}),
+              html.Button(html.A('Simulate 20 EONIA paths'), id='simulate_again_20', n_clicks=0, style={'margin-right':'1rem'}),
+              html.Button(html.A('Simulate 100 EONIA paths'), id='simulate_again_100', n_clicks=0)], style={'display':'inline-block'}),
     
     dcc.Graph(figure = fig2), 
-
-    html.Div(id='page-2-button-1'),
-    html.Div(id='page-2-button-2'),
-    html.Div(id='page-2-button-3'),
 
     dcc.Markdown('''###### The table below shows the Value-at-Risk for €STER based on \
                  TimeGAN and 1-factor Vasicek for multiple T based on the €STER simulations.''', style = {"padding":"3px"}),
@@ -138,7 +154,10 @@ page_2_layout = html.Div([
         dash_table.DataTable(
         id = 'VaR-table',
         data=VaRs.to_dict('records'),
-        columns=[{'id': c, 'name': c} for c in VaRs.columns],
+        columns=[{'id': c, 'format': Format( 
+                precision=5,
+                scheme=Scheme.fixed,
+                decimal_delimiter='.'), 'name': c} for c in VaRs.columns],
         style_header={'backgroundColor': 'rgb(21, 46, 64)',
                       'fontWeight': 'bold',
                       'border': '2px solid white'},
@@ -152,13 +171,3 @@ page_2_layout = html.Div([
     html.Div(id='page-1-content')
 
 ], style={"margin-right":"2%", "margin-left":"2%"})
-
-# @app.callback(
-#     Output(component_id='page-2-button-1', component_property='children'),
-#     [Input(component_id='simulate_again_1', component_property='n_clicks')]
-# )
-# def update_output(n_clicks):
-#     if n_clicks is None:
-#         return "Nothing happend yet"
-#     else:
-#         return "Elephants are the only animal that can't jump"

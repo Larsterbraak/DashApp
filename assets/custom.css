@@ -614,12 +614,13 @@ a {
 ::-webkit-scrollbar {
   width: 10px !important;
   display: block !important;
+  color: #7CD3F7;
 }
 
 /* Track */
 ::-webkit-scrollbar-track {
-  background: #1e1e1e !important;
-  border-radius: 10px !important;
+  background: rgba(66, 75, 107, 0.90);
+  border-radius: 0px !important;
   display: block !important;
 }
 
@@ -631,6 +632,7 @@ a {
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
   background: #d8d8d870 !important;
+  color:#7CD3F7;
 }
 
 .nav-pills .nav-link.active {

@@ -68,8 +68,8 @@ CONTENT_STYLE = {
     "color": "rgb(226,239,250)",
     'border': '1px solid rgb(38,43,61)',
     'borderRadius': '15px',
-    'overflow': 'hidden',
-    'font':'Helvetica'
+    'font':'Helvetica', 
+    "overflow": "hidden"
 }
 
 NAVBAR_STYLE = {
@@ -149,7 +149,8 @@ NAV_STYLE = {
     "color": "rgb(226,239,250)",
     'border': '0.5px solid white',
     "margin-left":"1rem",
-    "width":"30%"
+    "width":"30%",
+    "overflow":"hidden"
 }
 
 tabs = html.Div(dcc.Tabs(id = 'circos-control-tabs', value = 'what-is', children = [
@@ -176,12 +177,19 @@ tabs = html.Div(dcc.Tabs(id = 'circos-control-tabs', value = 'what-is', children
             children = html.Div(className = 'circos-tab', children = [
 
                 dcc.Markdown('''
-                             ###### On page "1. Inner workings" we describe the Generative Adversarial Network (GAN) \
-                             and discuss the TimeGAN model. On page "2. Short rate simulations" we shows a tool to simulate EONIA or €STER using \
-                             the TimeGAN model and compare the performance to baseline models. On page "3. Inspect latent space" we show a tool to check the \
-                             effect of the latent variables on the short rate simulations. Play around and see what type of short rate TimeGAN can produce. \
+                             ###### 1. Inner workings - We describe the Generative Adversarial Network (GAN) \
+                             and discuss the TimeGAN model.
                              ''', style = {"font-size":"8pt", "font-weight":"10", "letter-spacing":"0.5px"}),
-        
+                
+                dcc.Markdown('''
+                             ###### 2. Short rate simulations - We show a tool to simulate EONIA or €STER using \
+                             the TimeGAN model and compare the performance to baseline models.
+                             ''', style = {"font-size":"8pt", "font-weight":"10", "letter-spacing":"0.5px"}),
+
+                dcc.Markdown('''
+                             ###### 3. Inspect latent space - We show a tool to check the \
+                             effect of the latent variables on the short rate simulations. Play around and see what type of short rate TimeGAN can produce. \
+                             ''', style = {"font-size":"8pt", "font-weight":"10", "letter-spacing":"0.5px"}),        
                 ])
         )
 ]))
@@ -220,7 +228,7 @@ navbar = html.Nav(className = "navbar navbar-default navbar-static-top", childre
             
             ], style = NAVBAR_STYLE)
 
-app.layout = html.Div([dcc.Location(id="url"), navbar, html.Div([sidebar, content], className='row')], style={"background-color":"rgb(66, 75, 107)"})
+app.layout = html.Div([dcc.Location(id="url"), navbar, html.Div([sidebar, content], className='row')], style={"background-color":"rgba(66, 75, 107, 0.90)", "overflow":"hidden"})
 
 app.title = 'TimeGAN for short rates | Lars ter Braak'
 
@@ -233,7 +241,7 @@ app.title = 'TimeGAN for short rates | Lars ter Braak'
 def toggle_active_links(pathname):
     if pathname == "/":
         # Treat page 1 as the homepage / index
-        return True, False, False
+        return False, False, False
     return [pathname == f"/page-{i}" for i in range(1, 4)]
 
 # Index Page callback
@@ -263,6 +271,30 @@ def render_page_content(pathname):
                         ###### Feel free to read up on this app on the left side of the page. \
                         If you are ready to dive into the TimeGAN, select one of the pages above.''', style = {"padding":"5px"}),
         ], style = {"background-color":"rgb(38,43,61)"})
+
+@app.callback(Output(component_id='page-2-button-1', component_property='children'),
+              [Input(component_id='simulate_again_1', component_property='n_clicks')])
+def on_click(n_clicks):
+    if n_clicks == 0:
+        return n_clicks
+    else:
+        return n_clicks
+
+@app.callback(Output(component_id='page-2-button-2', component_property='children'),
+              [Input(component_id='simulate_again_20', component_property='n_clicks')])
+def on_click(n_clicks):
+    if n_clicks == 0:
+        return n_clicks
+    else:
+        return n_clicks
+
+@app.callback(Output(component_id='page-2-button-3', component_property='children'),
+              [Input(component_id='simulate_again_100', component_property='n_clicks')])
+def on_click(n_clicks):
+    if n_clicks == 0:
+        return n_clicks
+    else:
+        return n_clicks
 
 if __name__=='__main__':
     app.run_server(debug=True)

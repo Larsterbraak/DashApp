@@ -66,11 +66,22 @@ df5 = pd.DataFrame(simulations.T)
 df5['Date'] = dates2
 
 fig2 = px.line(df5, x='Date', y=[x for x in range(20)])
-fig2.update_layout(yaxis_title = 'daily difference EONIA', xaxis_title = 'Date', title='Simulations of EONIA using TimeGAN based on latent space', title_x=0.5)
+fig2.update_layout(yaxis_title = 'daily difference EONIA', xaxis_title = 'Date', 
+                   title={'text':'Simulations of EONIA using TimeGAN based on latent space', 'x':0.5, 'font':dict(color='white')}),
+
 fig2.update_layout({
     'plot_bgcolor': 'rgba(255,255,255,0)',
     'paper_bgcolor': 'rgba(0,0,0,0)',
 })
+
+fig2.update_layout(
+    legend={'title':{'text':'Simulation', 'font':dict(color='white')}, 'font':dict(color='white')},
+    yaxis_color = 'white',
+    xaxis_color = 'white'
+),
+
+fig2.update_xaxes(tickfont=dict(color='white')),
+fig2.update_yaxes(tickfont=dict(color='white')),
 
 latent_slider_1 = dcc.Slider(id='latent-input-1', min=0, max=1, step=0.01, value=0.5, marks={x: f"{1*x:.2f}" for x in np.linspace(0, 1, 11)})
 latent_slider_2 = dcc.Slider(id="latent-input-2", min=0, max=1, step=0.01, value=0.5, marks={x: f"{1*x:.2f}" for x in np.linspace(0, 1, 11)})
