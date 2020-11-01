@@ -126,7 +126,7 @@ def simulate_yeah(simus):
         'paper_bgcolor': 'rgba(0,0,0,0)',
     })
 
-    fig2.update_xaxes(tickfont=dict(color='white'))
+    fig2.update_xaxes(tickfont=dict(color='white'), visible=True)
     fig2.update_yaxes(tickfont=dict(color='white'))
 
     return fig2
@@ -146,8 +146,7 @@ pd.options.display.float_format = '${:.2f}'.format
 page_2_layout = html.Div([    
     
     dcc.Markdown('''###### The figure shows €STER simulations based on TimeGAN. \
-                Double click on one of lines to isolate a €STER simulation. \
-                Press the buttons for new simulations.'''),
+                Double click on one of simulations in the legend to isolate a €STER simulation. '''),
 
     html.Div([html.Button('Simulate 1 EONIA path', id='simulate_again_1', n_clicks=0, style={'margin-right':'1rem'}),
               html.Button('Simulate 10 EONIA paths', id='simulate_again_10', n_clicks=0, style={'margin-right':'1rem'}),
