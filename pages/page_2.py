@@ -148,9 +148,9 @@ page_2_layout = html.Div([
     dcc.Markdown('''###### The figure shows €STER simulations based on TimeGAN. \
                 Double click on one of simulations in the legend to isolate a €STER simulation. '''),
 
-    html.Div([html.Button('Simulate 1 EONIA path', id='simulate_again_1', n_clicks=0, style={'margin-right':'1rem'}),
-              html.Button('Simulate 10 EONIA paths', id='simulate_again_10', n_clicks=0, style={'margin-right':'1rem'}),
-              html.Button('Simulate 100 EONIA paths', id='simulate_again_100', n_clicks=0),
+    html.Div([html.Button('Simulate 1 EONIA path', id='simulate_again_1', n_clicks=0, style={'margin-right':'1rem', 'witdh':'30%'}),
+              html.Button('Simulate 10 EONIA paths', id='simulate_again_10', n_clicks=0, style={'margin-right':'1rem', 'witdh':'30%'}),
+              html.Button('Simulate 100 EONIA paths', id='simulate_again_100', n_clicks=0, style={'width':'30%'}),
               html.Div(id='clicked-button', children='btn1:0 btn2:0 btn3:0 last:nan', style={'display':'none'})], style={'display':'inline-block'}),
 
     dcc.Graph(id='page-2-graph'),
