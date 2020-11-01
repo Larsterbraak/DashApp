@@ -25,7 +25,6 @@ Outputs
 
 import numpy as np
 from assets.training import RandomGenerator
-import matplotlib.pyplot as plt
 import pandas as pd
 from scipy import stats
 
