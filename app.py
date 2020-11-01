@@ -14,6 +14,7 @@ from pages import page_2
 from pages import page_3
 
 from pages.page_2 import simulate_yeah
+from pages.page_3 import latent_plot
 
 from assets.training import RandomGenerator
 from assets.metrics import load_models
@@ -220,7 +221,8 @@ navbar = html.Nav(className = "navbar navbar-default navbar-static-top", childre
                 html.Img(src='assets/linkedin_icon.png', style={"height":"40px", "margin-left":"2rem", "float":"left"}),
             ], className = 'row',  style = {"float":"left", "margin-left": "2rem", "margin-top":"1rem", "margin-bottom":"1rem"}),
             
-            html.H2('TimeGAN for EONIA-€STER transition', style = {"float": "center", 'font':'Helvetica', "margin-top":"1rem", "margin-left": "4rem", "margin-right":"4rem", "margin-bottom":"1rem"}), 
+            dcc.Markdown('''###### TimeGAN for EONIA-€STER transition''', style = {"font-size":"8pt", "font-weight":"10", "letter-spacing":"0.5px"}),
+            #html.H2('TimeGAN for EONIA-€STER transition', style = {"float": "center", 'font':'Helvetica', "margin-top":"1rem", "margin-left": "4rem", "margin-right":"4rem", "margin-bottom":"1rem"}), 
 
             html.Div([
                 html.Img(src='assets/github.png', style={"height":"40px", "margin-right":"2rem", "float":"right"}),
@@ -274,16 +276,6 @@ def render_page_content(pathname):
                         If you are ready to dive into the TimeGAN, select one of the pages above.''', style = {"padding":"5px"}),
         ], style = {"background-color":"rgb(38,43,61)"})
 
-# @app.callback(Output(component_id='page-2-graph', component_property='figure'),
-#               [Input(component_id='simulate_again_1', component_property='n_clicks'),
-#                Input(component_id='simulate_again_10', component_property='n_clicks'),
-#                Input(component_id='simulate_again_100', component_property='n_clicks')])
-# def on_click(n_clicks1, n_clicks2, n_clicks3):
-#     if n_clicks1 == 0 and n_clicks2 == 0 and n_clicks3 ==0:
-#         return simulate_yeah(1)
-#     else:
-#         return simulate_yeah(10)
-
 @app.callback(Output('page-2-graph', 'figure'),
               [Input('clicked-button', 'children')])
 def button_action(clicked):
@@ -319,6 +311,16 @@ def updated_clicked(del_clicks, add_clicks, tog_clicks, prev_clicks):
 
     cur_clicks = 'btn1:{} btn2:{} btn3:{} last:{}'.format(del_clicks, add_clicks, tog_clicks, last_clicked)
     return cur_clicks
+
+@app.callback(Output(component_id='test-figure', component_property='figure'),
+               [Input('latent-input-1', 'value'),
+                Input('latent-input-2', 'value'),
+                Input('latent-input-3', 'value'),
+                Input('latent-input-4', 'value')])
+def provide_plot(a, b, c, d):
+    return latent_plot(a,b,c,d)
+         
+
 
 if __name__=='__main__':
     app.run_server(debug=True)
