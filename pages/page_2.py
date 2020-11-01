@@ -80,44 +80,56 @@ for i in [1, 10, 20]:
 upperVaR = np.round(upperVaR, 4)
 lowerVaR = np.round(lowerVaR, 4)
 
-# Simulate 50 EONIA short rates as an example
-Z_mb = RandomGenerator(10, [20, hidden_dim])
-samples = recovery_model(generator_model(Z_mb)).numpy()
-reshaped_data = samples.reshape((samples.shape[0]*samples.shape[1], 
-                                samples.shape[2]))
+def simulate_yeah(simus):
 
-scaled_reshaped_data = scaler.inverse_transform(reshaped_data)
-simulations = scaled_reshaped_data.reshape(((samples.shape[0],
-                                             samples.shape[1], 
-                                             samples.shape[2])))
+    # Define the settings
+    hparams = []
+    hidden_dim = 4
 
-# Only get the EONIA simulations
-simulations = simulations[:, :, 8]
+    # Import the pre-trained models
+    embedder_model, recovery_model, supervisor_model, generator_model, discriminator_model = load_models(8250, hparams, hidden_dim)
 
-dates2 = pd.date_range(start = '12-03-2018',
-                     end = '12-31-2018',
-                     periods = 20)
+    # Simulate 50 EONIA short rates as an example
+    Z_mb = RandomGenerator(simus, [20, hidden_dim])
+    samples = recovery_model(generator_model(Z_mb)).numpy()
+    reshaped_data = samples.reshape((samples.shape[0]*samples.shape[1], 
+                                    samples.shape[2]))
 
-df5 = pd.DataFrame(simulations.T)
-df5['Date'] = dates2
+    scaled_reshaped_data = scaler.inverse_transform(reshaped_data)
+    simulations = scaled_reshaped_data.reshape(((samples.shape[0],
+                                                samples.shape[1], 
+                                                samples.shape[2])))
 
-fig2 = px.line(df5, x='Date', y=[x for x in range(10)])
-fig2.update_layout(yaxis_title = 'Daily difference EONIA', xaxis_title = 'Date', 
-                   title={'text':'Simulations of EONIA using TimeGAN', 'x':0.5, 'font':dict(color='white')}),
+    # Only get the EONIA simulations
+    simulations = simulations[:, :, 8]
 
-fig2.update_layout(
-    legend={'title':{'text':'Simulation', 'font':dict(color='white')}, 'font':dict(color='white')},
-    yaxis_color = 'white',
-    xaxis_color = 'white'
-),
+    dates2 = pd.date_range(start = '12-03-2018',
+                        end = '12-31-2018',
+                        periods = 20)
 
-fig2.update_layout({
-    'plot_bgcolor': 'rgba(255,255,255,0)',
-    'paper_bgcolor': 'rgba(0,0,0,0)',
-})
+    df5 = pd.DataFrame(simulations.T)
+    df5['Date'] = dates2
 
-fig2.update_xaxes(tickfont=dict(color='white')),
-fig2.update_yaxes(tickfont=dict(color='white')),
+    fig2 = px.line(df5, x='Date', y=[x for x in range(simus)])
+    fig2.update_layout(yaxis_title = 'Daily difference EONIA', xaxis_title = 'Date', 
+                    title={'text':'Simulations of EONIA using TimeGAN', 'x':0.5, 'font':dict(color='white')})
+
+    fig2.update_layout(
+        legend={'title':{'text':'Simulation', 'font':dict(color='white')}, 'font':dict(color='white')},
+        yaxis_color = 'white',
+        xaxis_color = 'white',
+        yaxis=dict(range=[-0.006, 0.006])
+    )
+
+    fig2.update_layout({
+        'plot_bgcolor': 'rgba(255,255,255,0)',
+        'paper_bgcolor': 'rgba(0,0,0,0)',
+    })
+
+    fig2.update_xaxes(tickfont=dict(color='white'))
+    fig2.update_yaxes(tickfont=dict(color='white'))
+
+    return fig2
 
 # Create Table with the VaR estimates
 VaRs = pd.DataFrame([np.append("TimeGAN with PLS+FM - upper", upperVaR), 
@@ -137,18 +149,15 @@ page_2_layout = html.Div([
                 Double click on one of lines to isolate a €STER simulation. \
                 Press the buttons for new simulations.'''),
 
-    dbc.Row([dbc.Col(html.Div(id='page-2-button-1')),
-            dbc.Col(html.Div(id='page-2-button-2')),
-            dbc.Col(html.Div(id='page-2-button-3'))]),
+    html.Div([html.Button('Simulate 1 EONIA path', id='simulate_again_1', n_clicks=0, style={'margin-right':'1rem'}),
+              html.Button('Simulate 10 EONIA paths', id='simulate_again_10', n_clicks=0, style={'margin-right':'1rem'}),
+              html.Button('Simulate 100 EONIA paths', id='simulate_again_100', n_clicks=0),
+              html.Div(id='clicked-button', children='btn1:0 btn2:0 btn3:0 last:nan', style={'display':'none'})], style={'display':'inline-block'}),
 
-    html.Div([html.Button(html.A('Simulate 1 EONIA path'), id='simulate_again_1', n_clicks=0, style={'margin-right':'1rem'}),
-              html.Button(html.A('Simulate 20 EONIA paths'), id='simulate_again_20', n_clicks=0, style={'margin-right':'1rem'}),
-              html.Button(html.A('Simulate 100 EONIA paths'), id='simulate_again_100', n_clicks=0)], style={'display':'inline-block'}),
-    
-    dcc.Graph(figure = fig2), 
+    dcc.Graph(id='page-2-graph'),
 
-    dcc.Markdown('''###### The table below shows the Value-at-Risk for €STER based on \
-                 TimeGAN and 1-factor Vasicek for multiple T based on the €STER simulations.''', style = {"padding":"3px"}),
+    dcc.Markdown('''###### The table below shows the Value-at-Risk for EONIA based on \
+                 TimeGAN and 1-factor Vasicek for multiple T based on 1,000 EONIA simulations.''', style = {"padding":"3px"}),
     
     dbc.Row(dbc.Col(
         dash_table.DataTable(

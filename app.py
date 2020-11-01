@@ -13,6 +13,8 @@ from pages import page_1
 from pages import page_2
 from pages import page_3
 
+from pages.page_2 import simulate_yeah
+
 from assets.training import RandomGenerator
 from assets.metrics import load_models
 
@@ -61,7 +63,7 @@ CONTENT_STYLE = {
     "left": 0,
     "right": 0,
     "margin-left": "1%",
-    "margin-right": "2%",
+    "margin-right": "0%",
     "padding": "2rem 1rem",
     "width": "64%",
     "background-color": "rgb(38,43,61)",
@@ -74,7 +76,7 @@ CONTENT_STYLE = {
 
 NAVBAR_STYLE = {
     "margin-left":"1rem",
-    "margin-right": "1rem",
+    "margin-right": "0rem",
     "margin-bottom": "1rem",
     "margin-top": "0rem",
     "width":"98%",
@@ -272,29 +274,51 @@ def render_page_content(pathname):
                         If you are ready to dive into the TimeGAN, select one of the pages above.''', style = {"padding":"5px"}),
         ], style = {"background-color":"rgb(38,43,61)"})
 
-@app.callback(Output(component_id='page-2-button-1', component_property='children'),
-              [Input(component_id='simulate_again_1', component_property='n_clicks')])
-def on_click(n_clicks):
-    if n_clicks == 0:
-        return n_clicks
-    else:
-        return n_clicks
+# @app.callback(Output(component_id='page-2-graph', component_property='figure'),
+#               [Input(component_id='simulate_again_1', component_property='n_clicks'),
+#                Input(component_id='simulate_again_10', component_property='n_clicks'),
+#                Input(component_id='simulate_again_100', component_property='n_clicks')])
+# def on_click(n_clicks1, n_clicks2, n_clicks3):
+#     if n_clicks1 == 0 and n_clicks2 == 0 and n_clicks3 ==0:
+#         return simulate_yeah(1)
+#     else:
+#         return simulate_yeah(10)
 
-@app.callback(Output(component_id='page-2-button-2', component_property='children'),
-              [Input(component_id='simulate_again_20', component_property='n_clicks')])
-def on_click(n_clicks):
-    if n_clicks == 0:
-        return n_clicks
-    else:
-        return n_clicks
+@app.callback(Output('page-2-graph', 'figure'),
+              [Input('clicked-button', 'children')])
+def button_action(clicked):
+    last_clicked = clicked[-4:]
 
-@app.callback(Output(component_id='page-2-button-3', component_property='children'),
-              [Input(component_id='simulate_again_100', component_property='n_clicks')])
-def on_click(n_clicks):
-    if n_clicks == 0:
-        return n_clicks
+    if last_clicked == 'btn1':
+        return simulate_yeah(1)
+    if last_clicked == 'btn2':
+        return simulate_yeah(10)
+    if last_clicked == 'btn3':
+        return simulate_yeah(100)
     else:
-        return n_clicks
+        return simulate_yeah(20)
+
+@app.callback(
+    dash.dependencies.Output('clicked-button', 'children'),
+    [dash.dependencies.Input('simulate_again_1', 'n_clicks'),
+     dash.dependencies.Input('simulate_again_10', 'n_clicks'),
+     dash.dependencies.Input('simulate_again_100', 'n_clicks')],
+    [dash.dependencies.State('clicked-button', 'children')]
+)
+def updated_clicked(del_clicks, add_clicks, tog_clicks, prev_clicks):
+
+    prev_clicks = dict([i.split(':') for i in prev_clicks.split(' ')])
+    last_clicked = 'nan'
+
+    if del_clicks > int(prev_clicks['btn1']):
+        last_clicked = 'btn1'
+    elif add_clicks > int(prev_clicks['btn2']):
+        last_clicked = 'btn2'
+    elif tog_clicks > int(prev_clicks['btn3']):
+        last_clicked = 'btn3'
+
+    cur_clicks = 'btn1:{} btn2:{} btn3:{} last:{}'.format(del_clicks, add_clicks, tog_clicks, last_clicked)
+    return cur_clicks
 
 if __name__=='__main__':
     app.run_server(debug=True)
