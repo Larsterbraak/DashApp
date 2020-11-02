@@ -80,6 +80,21 @@ for i in [1, 10, 20]:
 upperVaR = np.round(upperVaR, 4)
 lowerVaR = np.round(lowerVaR, 4)
 
+def add_business_days(d, business_days_to_add):
+    num_whole_weeks = business_days_to_add / 5
+    extra_days = num_whole_weeks * 2
+
+    first_weekday = d.weekday()
+    remainder_days = business_days_to_add % 5
+
+    natural_day = first_weekday + remainder_days
+    if natural_day > 4:
+        if first_weekday == 5:
+            extra_days += 1
+        elif first_weekday != 6:
+            extra_days += 2
+    return d + datetime.timedelta(business_days_to_add + extra_days)
+
 def simulate_yeah(simus):
 
     # Define the settings
@@ -103,8 +118,12 @@ def simulate_yeah(simus):
     # Only get the EONIA simulations
     simulations = simulations[:, :, 8]
 
-    dates2 = pd.date_range(start = '12-03-2018',
-                        end = '12-31-2018',
+    # Make a fake date range
+    today = datetime.date.today()
+    next_day = add_business_days(today, 20)
+    
+    dates2 = pd.date_range(start = today,
+                        end = next_day,
                         periods = 20)
 
     df5 = pd.DataFrame(simulations.T)
@@ -112,7 +131,7 @@ def simulate_yeah(simus):
 
     fig2 = px.line(df5, x='Date', y=[x for x in range(simus)])
     fig2.update_layout(yaxis_title = 'Daily difference EONIA', xaxis_title = 'Date', 
-                    title={'text':'Simulations of EONIA using TimeGAN', 'x':0.5, 'font':dict(color='white')})
+                    title={'text':'Simulations of EONIA using TimeGAN', 'x':0.5, 'font':dict(color='white', family='Helvetica')})
 
     fig2.update_layout(
         legend={'title':{'text':'Simulation', 'font':dict(color='white')}, 'font':dict(color='white')},
@@ -126,8 +145,8 @@ def simulate_yeah(simus):
         'paper_bgcolor': 'rgba(0,0,0,0)',
     })
 
-    fig2.update_xaxes(tickfont=dict(color='white'), visible=True)
-    fig2.update_yaxes(tickfont=dict(color='white'))
+    fig2.update_xaxes(tickfont=dict(color='white', family='Helvetica'), visible=True)
+    fig2.update_yaxes(tickfont=dict(color='white', family='Helvetica'))
 
     return fig2
 
@@ -145,18 +164,17 @@ pd.options.display.float_format = '${:.2f}'.format
 
 page_2_layout = html.Div([    
     
-    dcc.Markdown('''###### The figure shows €STER simulations based on TimeGAN. \
-                Double click on one of simulations in the legend to isolate a €STER simulation. '''),
+    dcc.Markdown('''###### The figure shows 20-day short rate simulations produced by the TimeGAN model. '''),
 
-    html.Div([html.Button('Simulate 1 EONIA path', id='simulate_again_1', n_clicks=0, style={'margin-right':'1rem', 'witdh':'30%'}),
-              html.Button('Simulate 10 EONIA paths', id='simulate_again_10', n_clicks=0, style={'margin-right':'1rem', 'witdh':'30%'}),
-              html.Button('Simulate 100 EONIA paths', id='simulate_again_100', n_clicks=0, style={'width':'30%'}),
-              html.Div(id='clicked-button', children='btn1:0 btn2:0 btn3:0 last:nan', style={'display':'none'})], style={'display':'inline-block'}),
+    html.Div([html.Button('Simulate 1 EONIA path', id='simulate_again_1', n_clicks=0, style={'witdh':'30%', 'float':'left'}),
+              html.Button('Simulate 10 EONIA paths', id='simulate_again_10', n_clicks=0, style={'witdh':'30%', 'float':'center', 'margin-left':'4%', 'margin-right':'4%'}),
+              html.Button('Simulate 100 EONIA paths', id='simulate_again_100', n_clicks=0, style={'width':'30%', 'float':'right'}),
+              html.Div(id='clicked-button', children='btn1:0 btn2:0 btn3:0 last:nan', style={'display':'none'})], style={'display':'inline-block', 'width':'100%'}),
 
     dcc.Graph(id='page-2-graph'),
 
-    dcc.Markdown('''###### The table below shows the Value-at-Risk for EONIA based on \
-                 TimeGAN and 1-factor Vasicek for multiple T based on 1,000 EONIA simulations.''', style = {"padding":"3px"}),
+    dcc.Markdown('''###### The table shows the Value-at-Risk for EONIA based on \
+                 TimeGAN and 1-factor Vasicek for multiple T based on 1,000 EONIA simulations produced by the TimeGAN model.''', style = {"padding":"3px"}),
     
     dbc.Row(dbc.Col(
         dash_table.DataTable(
@@ -174,7 +192,8 @@ page_2_layout = html.Div([
             'color': 'white',
             'padding': '5px',
         },
-    ), width={'offset':2, 'size':8})),
+        style_table={'autosize':True}
+    ), style={'autosize':True, 'float':'center', 'margin-left':'10%', 'margin-right':'10%'})),
 
     html.Div(id='page-1-content')
 

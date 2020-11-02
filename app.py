@@ -96,6 +96,7 @@ TEST_STYLE = {
     'border': '0.5px solid white',
     'font':'Helvetica',
     "heigth":"1%",
+    "hover:background-color":'rgba(0,0,0,0.5)'
 }
 
 TEST_STYLE_2 = {
@@ -165,10 +166,10 @@ tabs = html.Div(dcc.Tabs(id = 'circos-control-tabs', value = 'what-is', children
         children = html.Div(id = 'control-tab', children = [
             dcc.Markdown(''' 
                         ###### This webapp is a demonstration of the MSc Thesis [TimeGAN for short rates](https://github.com/Larsterbraak/TimeGAN-short-rates/blob/master/Thesis.pdf) \
-                        commisioned by the Erasmus University Quantitative Finance department and \
-                        performed by [Lars ter Braak](https://www.linkedin.com/in/lars-ter-braak/). Feel free to have a look around and use \
-                        the TimeGAN to simulate short rates or see the effect of the latent space. \
-                        You can check a visualization of the Tensorflow training for the best TimeGAN model on [Tensorboard](https://tensorboard.dev/experiment/kqNuBA7aR96gB07zuM7z5g).''', style = {"font-size":"4pt", "font-weight":"100", "letter-spacing":"1px"}),
+                        for the completion of the MSc Quantitative Finance at the Erasmus university Rotterdam \
+                        performed by [Lars ter Braak](https://www.linkedin.com/in/lars-ter-braak/). Here you can learn about \
+                        the inner workings of the TimeGAN model, use the best TimeGAN model to simulate short rates and see the effect of the latent variables on the short rate simulations. \
+                        I provide a visualization of the Tensorflow training for the best TimeGAN model on [Tensorboard](https://tensorboard.dev/experiment/kqNuBA7aR96gB07zuM7z5g).''', style = {"font-size":"4pt", "font-weight":"100", "letter-spacing":"1px"}),
             ])
     ),
 
@@ -180,18 +181,18 @@ tabs = html.Div(dcc.Tabs(id = 'circos-control-tabs', value = 'what-is', children
             children = html.Div(className = 'circos-tab', children = [
 
                 dcc.Markdown('''
-                             ###### 1. Inner workings - We describe the Generative Adversarial Network (GAN) \
-                             and discuss the TimeGAN model.
+                             ###### 1. Inner workings - We discuss the mathematics behind the Generative Adversarial Network (GAN) \
+                             and the TimeGAN model.
                              ''', style = {"font-size":"8pt", "font-weight":"10", "letter-spacing":"0.5px"}),
                 
                 dcc.Markdown('''
-                             ###### 2. Short rate simulations - We show a tool to simulate EONIA or €STER using \
-                             the TimeGAN model and compare the performance to baseline models.
+                             ###### 2. Short rate simulation - We show a tool to simulate short rates using \
+                             the best TimeGAN model and compare the Value-at-Risk estimates to baseline models.
                              ''', style = {"font-size":"8pt", "font-weight":"10", "letter-spacing":"0.5px"}),
 
                 dcc.Markdown('''
                              ###### 3. Inspect latent space - We show a tool to check the \
-                             effect of the latent variables on the short rate simulations. Play around and see what type of short rate TimeGAN can produce. \
+                             effect of the latent variables on the short rate simulations. Play around and see what type of short rates the TimeGAN model can produce. \
                              ''', style = {"font-size":"8pt", "font-weight":"10", "letter-spacing":"0.5px"}),        
                 ])
         )
@@ -205,7 +206,7 @@ sidebar = html.Div([
 
 content = html.Div([dbc.Nav(children = [
 
-            dbc.NavItem(dbc.NavLink("1. Inner workings (math heavy)", active=False, href="/page-1", id="page-1-link", style={'font-weight':'bold'})),         
+            dbc.NavItem(dbc.NavLink("1. Inner workings (math heavy)", active=False, href="/page-1", id="page-1-link", style={'font-weight':'bold', 'vertical-align':True})),         
             dbc.NavItem(dbc.NavLink("2. Short rate simulation", active=False, href="/page-2", id="page-2-link", style={'font-weight':'bold'})),
             dbc.NavItem(dbc.NavLink("3. Inspect latent space", active=False, href="/page-3", id="page-3-link", style={'font-weight':'bold'}))
     
@@ -256,8 +257,8 @@ def render_page_content(pathname):
         return dbc.Jumbotron(
         [
            dcc.Markdown('''
-                       ###### Feel free to read up on this app on the left side of the page. \
-                       If you are ready to dive into the TimeGAN, select one of the pages above. ''', style = {"padding":"5px"}),
+                       ###### Read about the purpose and the content of this web app on the left side of the page. \
+                       If you are ready to dive into the TimeGAN model, select one of the pages above. ''', style = {"padding":"5px"}),
         ], style = {"background-color":"rgb(38,43,61)"}
     )
     elif pathname == '/page-1':
@@ -288,7 +289,7 @@ def button_action(clicked):
     if last_clicked == 'btn3':
         return simulate_yeah(100)
     else:
-        return simulate_yeah(20)
+        return simulate_yeah(10)
 
 @app.callback(
     dash.dependencies.Output('clicked-button', 'children'),
@@ -320,7 +321,5 @@ def updated_clicked(del_clicks, add_clicks, tog_clicks, prev_clicks):
 def provide_plot(a, b, c, d):
     return latent_plot(a,b,c,d)
          
-
-
 if __name__=='__main__':
     app.run_server(debug=False)

@@ -13,8 +13,24 @@ from assets.training import RandomGenerator
 import numpy as np
 from assets.metrics import load_models
 from dash.dependencies import Input, Output
+import datetime
 
 tf.get_logger().setLevel('ERROR')
+
+def add_business_days(d, business_days_to_add):
+    num_whole_weeks = business_days_to_add / 5
+    extra_days = num_whole_weeks * 2
+
+    first_weekday = d.weekday()
+    remainder_days = business_days_to_add % 5
+
+    natural_day = first_weekday + remainder_days
+    if natural_day > 4:
+        if first_weekday == 5:
+            extra_days += 1
+        elif first_weekday != 6:
+            extra_days += 2
+    return d + datetime.timedelta(business_days_to_add + extra_days)
 
 def latent_plot(a, b, c, d):
     # Import the data and apply the transformation
@@ -57,15 +73,19 @@ def latent_plot(a, b, c, d):
     # Only get the EONIA simulations
     simulations = simulations[:, :, 8]
 
-    dates2 = pd.date_range(start = '12-03-2018',
-                        end = '12-31-2018',
+    # Make a fake date range
+    today = datetime.date.today()
+    next_day = add_business_days(today, 20)
+    
+    dates2 = pd.date_range(start = today,
+                        end = next_day,
                         periods = 20)
 
     df5 = pd.DataFrame(simulations.T)
     df5['Date'] = dates2
 
     fig2 = px.line(df5, x='Date', y=[x for x in range(10)])
-    fig2.update_layout(yaxis_title = 'daily difference EONIA', xaxis_title='', 
+    fig2.update_layout(yaxis_title = 'Daily difference EONIA', xaxis_title='', 
                     title={'text':'Simulations of EONIA using TimeGAN based on latent space', 'x':0.5, 'font':dict(color='white')})
 
     fig2.update_layout({
@@ -85,13 +105,14 @@ def latent_plot(a, b, c, d):
 
     return fig2
 
-latent_slider_1 = dcc.Slider(id='latent-input-1', min=0, max=1, step=0.01, value=0.1, marks={x: f"{1*x:.2f}" for x in np.linspace(0, 1, 11)})
-latent_slider_2 = dcc.Slider(id="latent-input-2", min=0, max=1, step=0.01, value=0.1, marks={x: f"{1*x:.2f}" for x in np.linspace(0, 1, 11)})
-latent_slider_3 = dcc.Slider(id="latent-input-3", min=0, max=1, step=0.01, value=0.1, marks={x: f"{1*x:.2f}" for x in np.linspace(0, 1, 11)})
-latent_slider_4 = dcc.Slider(id="latent-input-4", min=0, max=1, step=0.01, value=0.1, marks={x: f"{1*x:.2f}" for x in np.linspace(0, 1, 11)})
+latent_slider_1 = dcc.Slider(id='latent-input-1', min=0, max=1, step=0.01, value=0.90, marks={x: f"{1*x:.2f}" for x in np.linspace(0, 1, 11)})
+latent_slider_2 = dcc.Slider(id="latent-input-2", min=0, max=1, step=0.01, value=0.68, marks={x: f"{1*x:.2f}" for x in np.linspace(0, 1, 11)})
+latent_slider_3 = dcc.Slider(id="latent-input-3", min=0, max=1, step=0.01, value=0.80, marks={x: f"{1*x:.2f}" for x in np.linspace(0, 1, 11)})
+latent_slider_4 = dcc.Slider(id="latent-input-4", min=0, max=1, step=0.01, value=0.40, marks={x: f"{1*x:.2f}" for x in np.linspace(0, 1, 11)})
 
 page_3_layout = html.Div([    
-    dcc.Markdown('''###### This figure shows the ESTER simulation conditioned on latent space.'''),
+    dcc.Markdown('''###### This figure shows 20-day short rate simulations conditioned on a latent space. Use the sliders \
+                 to see the effect of the latent variables on the short rate simulations.'''),
 
     dcc.Graph(id='test-figure', style={'padding':'0', 'margin-bottom':'0%'}),
 
